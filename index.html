@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SOLARIS QUANTUM | Next-Gen Architectural Solar & Energy Vaults</title>
+  <meta name="description" content="Aerospace-grade photovoltaic architectural glass shingles, solid-state battery vaults, and autonomous solar microgrids with 24.8% record cell efficiency.">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            solar: {
+              50: '#fffbeb',
+              100: '#fef3c7',
+              200: '#fde68a',
+              300: '#fcd34d',
+              400: '#fbbf24',
+              500: '#f59e0b',
+              600: '#d97706',
+              700: '#b45309',
+              800: '#92400e',
+              900: '#78350f',
+            },
+            obsidian: {
+              950: '#07080c',
+              900: '#0c0e17',
+              800: '#141824',
+              700: '#1e2436',
+            }
+          },
+          fontFamily: {
+            display: ['Syne', 'sans-serif'],
+            sans: ['Outfit', 'sans-serif'],
+            mono: ['Space Grotesk', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="./styles.css">
+
+  <!-- Three.js & Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="./js/RoundedBoxGeometry.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-obsidian-950 text-slate-100 min-h-screen relative selection:bg-amber-500 selection:text-black">
+
+  <!-- ================= TOP NAVIGATION ================= -->
+  <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 backdrop-blur-xl bg-obsidian-950/75 border-b border-white/[0.06]">
+    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+      
+      <!-- Brand Logo -->
+      <a href="#" class="flex items-center gap-3.5 group">
+        <div class="w-10 h-10 rounded-full border border-amber-400/40 bg-gradient-to-tr from-amber-500/20 via-orange-500/10 to-transparent flex items-center justify-center relative overflow-hidden group-hover:border-amber-400 transition-colors">
+          <!-- Solar Crescent Prism Mark (matches screenshot logo style) -->
+          <div class="w-5 h-5 rounded-full bg-gradient-to-r from-amber-400 to-yellow-200"></div>
+          <div class="w-4 h-4 rounded-full bg-obsidian-950 absolute -top-1 -right-1"></div>
+        </div>
+        <div class="flex flex-col">
+          <span class="font-display font-extrabold tracking-wider text-xl text-white group-hover:text-amber-300 transition-colors">SOLARIS</span>
+          <span class="text-[9px] font-mono tracking-[0.25em] text-amber-400/80 uppercase -mt-1">Quantum Tech</span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Menu -->
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
+        <a href="#hero-section" class="hover:text-amber-400 transition-colors">Overview</a>
+        <a href="#products-section" class="hover:text-amber-400 transition-colors">Architectural Solar</a>
+        <a href="#simulator-section" class="hover:text-amber-400 transition-colors">24h Simulator</a>
+        <a href="#calculator-section" class="hover:text-amber-400 transition-colors">Savings Calculator</a>
+        <a href="#comparison-section" class="hover:text-amber-400 transition-colors">Technology</a>
+      </nav>
+
+      <!-- Right Action Hub -->
+      <div class="flex items-center gap-4">
+        <!-- Live Solar Irradiance Indicator -->
+        <div class="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/10 text-xs font-mono text-amber-300/90">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>1,048 W/m² PEAK</span>
+        </div>
+
+        <!-- Primary CTA Button -->
+        <button class="open-quote-modal px-5 py-2.5 rounded-full bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-400 text-obsidian-950 font-bold text-xs uppercase tracking-wider hover:brightness-110 active:scale-95 transition-all shadow-[0_0_20px_rgba(245,158,11,0.35)] flex items-center gap-2">
+          <span>Design My Roof</span>
+          <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ================= HERO SECTION (3D GLASS REFRACTION & ROLLING CUBE) ================= -->
+  <section id="hero-section" class="relative w-full h-screen overflow-hidden flex items-center justify-center pt-16">
+    
+    <!-- Three.js Canvas Container (3D Cube with Glass Refraction & Chromatic Aberration) -->
+    <div id="hero-canvas-container" class="absolute inset-0 w-full h-full z-10">
+      <!-- WebGL Canvas injected here by app.js -->
+    </div>
+
+    <!-- UI Overlay Layer (Pointer Events pass-through for 3D dragging) -->
+    <div class="absolute inset-0 z-20 pointer-events-none flex flex-col justify-between p-6 md:p-12">
+      
+      <!-- Top Bar Controls -->
+      <div class="flex items-center justify-between mt-16 pointer-events-auto">
+        <!-- Breadcrumb / Mode Info -->
+        <div class="flex items-center gap-3">
+          <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+          <span class="text-xs uppercase font-mono tracking-widest text-slate-400">Interactive 3D Refraction Core</span>
+        </div>
+
+        <!-- Top Right Slide Switcher (<) (>) (matching reference screenshots) -->
+        <div class="flex items-center gap-3">
+          <button id="slide-prev-btn" aria-label="Previous Slide" class="w-12 h-12 rounded-full border border-white/20 bg-white/[0.04] backdrop-blur-md flex items-center justify-center text-white hover:border-amber-400 hover:text-amber-400 hover:bg-white/10 transition-all active:scale-90">
+            <i data-lucide="arrow-left" class="w-5 h-5"></i>
+          </button>
+          <button id="slide-next-btn" aria-label="Next Slide" class="w-12 h-12 rounded-full border border-white/20 bg-white/[0.04] backdrop-blur-md flex items-center justify-center text-white hover:border-amber-400 hover:text-amber-400 hover:bg-white/10 transition-all active:scale-90">
+            <i data-lucide="arrow-right" class="w-5 h-5"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Right Pagination Dots (matching reference dots) -->
+      <div class="absolute right-8 top-1/2 -translate-y-1/2 flex flex-col items-center gap-4 pointer-events-auto z-30">
+        <button class="slide-dot w-3 h-3 rounded-full bg-amber-400 scale-125 transition-all" data-slide="0" aria-label="Go to Slide 1"></button>
+        <button class="slide-dot w-3 h-3 rounded-full bg-white/30 hover:bg-white/70 transition-all" data-slide="1" aria-label="Go to Slide 2"></button>
+        <button class="slide-dot w-3 h-3 rounded-full bg-white/30 hover:bg-white/70 transition-all" data-slide="2" aria-label="Go to Slide 3"></button>
+      </div>
+
+      <!-- Center Tooltip: Drag to Roll Hand Indicator -->
+      <div class="absolute top-[28%] left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-60 hover:opacity-100 transition-opacity flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-white/10 text-[11px] font-mono text-slate-300">
+        <i data-lucide="hand" class="w-3.5 h-3.5 text-amber-400 animate-bounce"></i>
+        <span>Click & Drag to Roll 3D Prism</span>
+      </div>
+
+      <!-- Bottom HUD (matching reference layout) -->
+      <div class="w-full grid grid-cols-1 md:grid-cols-3 items-end gap-8 pb-4">
+        
+        <!-- Bottom Left: Tagline & Description -->
+        <div class="max-w-md pointer-events-auto">
+          <p id="hero-tagline" class="font-display font-bold text-2xl md:text-3xl text-white tracking-tight leading-snug">
+            We Capture Worlds Born from Sun.
+          </p>
+          <p id="hero-desc" class="text-xs md:text-sm text-slate-400 mt-2 font-normal leading-relaxed">
+            Next-Gen Photovoltaic Architecture. Aerospace-grade silicon capturing 24.8% pure solar flux.
+          </p>
+
+          <!-- Interactive 3D Control Pills -->
+          <div class="flex flex-wrap items-center gap-2 mt-4">
+            <!-- Rolling Speed Toggle -->
+            <button id="toggle-speed-btn" class="px-3 py-1 rounded-full bg-white/[0.05] border border-white/10 hover:border-amber-400/50 text-[11px] font-mono text-slate-300 flex items-center gap-1.5 transition-colors">
+              <span class="text-amber-400">Speed:</span>
+              <span id="speed-display">1.0x</span>
+            </button>
+            <!-- Dispersion / Aberration Toggle -->
+            <button id="toggle-aberration-btn" class="px-3 py-1 rounded-full bg-white/[0.05] border border-white/10 hover:border-amber-400/50 text-[11px] font-mono text-slate-300 flex items-center gap-1.5 transition-colors">
+              <span class="text-amber-400">Dispersion:</span>
+              <span id="aberration-display">Medium</span>
+            </button>
+            <!-- Sound Toggle -->
+            <button id="toggle-sound-btn" class="p-1.5 rounded-full bg-white/[0.05] border border-white/10 hover:border-amber-400/50 text-slate-300 transition-colors" title="Toggle Glass Audio Feedback">
+              <i id="sound-icon" data-lucide="volume-2" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Bottom Center: Interactive Range Slider & "Start Today" Pill (matching reference) -->
+        <div class="flex flex-col items-center justify-center pointer-events-auto">
+          <div class="w-full max-w-xs flex flex-col items-center gap-2">
+            <button class="open-quote-modal px-6 py-2 rounded-full border border-white/30 bg-black/60 backdrop-blur-md text-white font-medium text-xs tracking-wider uppercase hover:border-amber-400 hover:text-amber-300 transition-all active:scale-95 shadow-lg">
+              <span id="start-today-text">Start Today: Photovoltaics</span>
+            </button>
+            
+            <!-- Interactive Progress Scrub Bar -->
+            <div class="w-full flex items-center gap-3 mt-1">
+              <span class="text-[10px] font-mono text-slate-500">01</span>
+              <input id="hero-slide-range" type="range" min="0" max="2" step="1" value="0" class="w-full cursor-pointer accent-amber-400" aria-label="Hero Slide Progress">
+              <span class="text-[10px] font-mono text-slate-500">03</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Right: Giant Outlined Slide Number "01" (matching reference) -->
+        <div class="flex justify-end items-end pointer-events-auto">
+          <span id="hero-slide-number" class="text-7xl md:text-9xl font-display font-extrabold text-outline select-none leading-none">
+            01
+          </span>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- ================= LIVE SOLAR PERFORMANCE STATS RIBBON ================= -->
+  <section class="border-y border-white/[0.06] bg-obsidian-900/60 backdrop-blur-md py-8 relative z-30">
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-6">
+      
+      <div class="flex flex-col">
+        <span class="text-xs uppercase font-mono tracking-widest text-slate-400">Silicon Efficiency</span>
+        <span class="font-display text-3xl md:text-4xl font-extrabold text-white mt-1">24.8%</span>
+        <span class="text-xs text-amber-400/90 mt-0.5">N-Type TOPCon Cell Record</span>
+      </div>
+
+      <div class="flex flex-col">
+        <span class="text-xs uppercase font-mono tracking-widest text-slate-400">Net Energy Cost</span>
+        <span class="font-display text-3xl md:text-4xl font-extrabold text-white mt-1">$0.00</span>
+        <span class="text-xs text-emerald-400 mt-0.5">Zero Grid Dependency</span>
+      </div>
+
+      <div class="flex flex-col">
+        <span class="text-xs uppercase font-mono tracking-widest text-slate-400">Comprehensive Warranty</span>
+        <span class="font-display text-3xl md:text-4xl font-extrabold text-white mt-1">25 Yrs</span>
+        <span class="text-xs text-slate-400 mt-0.5">Power + Inverter + Leakproof</span>
+      </div>
+
+      <div class="flex flex-col">
+        <span class="text-xs uppercase font-mono tracking-widest text-slate-400">Federal Clean ITC</span>
+        <span class="font-display text-3xl md:text-4xl font-extrabold text-white mt-1">30%</span>
+        <span class="text-xs text-amber-400/90 mt-0.5">Immediate Federal Tax Deduction</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= ARCHITECTURAL SOLAR PRODUCT ECOSYSTEM ================= -->
+  <section id="products-section" class="py-24 max-w-7xl mx-auto px-6 relative z-30">
+    
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-16">
+      <div>
+        <span class="text-xs font-mono uppercase tracking-[0.25em] text-amber-400">Hardware Ecosystem</span>
+        <h2 class="font-display text-3xl md:text-5xl font-extrabold text-white mt-2">
+          Engineered for Pure Resilience.
+        </h2>
+      </div>
+      <p class="text-sm text-slate-400 max-w-md mt-4 md:mt-0">
+        Each unit is a masterpiece of precision industrial design, delivering unmatched energy density without compromising building aesthetics.
+      </p>
+    </div>
+
+    <!-- Product Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      
+      <!-- Card 1: Solaris Prism-Tile™ Roof -->
+      <div class="glass-panel glass-panel-hover rounded-2xl overflow-hidden flex flex-col group">
+        <div class="relative h-64 overflow-hidden bg-obsidian-900">
+          <img src="./assets/solar_roof_luxury.jpg" alt="Solaris Prism-Tile Luxury Solar Roof" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+          <div class="absolute inset-0 bg-gradient-to-t from-obsidian-950 via-transparent to-transparent"></div>
+          <span class="absolute top-4 left-4 px-3 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-[11px] font-mono text-amber-300">
+            Architectural Shingles
+          </span>
+        </div>
+        <div class="p-6 flex-1 flex flex-col justify-between">
+          <div>
+            <h3 class="font-display text-xl font-bold text-white group-hover:text-amber-400 transition-colors">
+              Solaris Prism-Tile™
+            </h3>
+            <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+              Monocrystalline quartz photovoltaic tiles that replace traditional shingles. 3x stronger than slate, Class A fire-rated, and completely invisible wiring.
+            </p>
+            <div class="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-white/[0.06] text-xs font-mono">
+              <div>
+                <span class="text-slate-500 block text-[10px]">HAIL RATING</span>
+                <span class="text-slate-200 font-semibold">Class 4 (2" Hail)</span>
+              </div>
+              <div>
+                <span class="text-slate-500 block text-[10px]">WIND RESISTANCE</span>
+                <span class="text-slate-200 font-semibold">135 MPH Hurricane</span>
+              </div>
+            </div>
+          </div>
+          <button class="open-quote-modal mt-6 w-full py-2.5 rounded-xl border border-white/10 bg-white/[0.02] hover:bg-amber-400/10 hover:border-amber-400/40 text-xs font-medium text-white transition-all flex items-center justify-center gap-2">
+            <span>Configure Shingle Roof</span>
+            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Card 2: Nexus QuantumVault™ Battery -->
+      <div class="glass-panel glass-panel-hover rounded-2xl overflow-hidden flex flex-col group">
+        <div class="relative h-64 overflow-hidden bg-obsidian-900">
+          <img src="./assets/solar_battery_smart.jpg" alt="Nexus QuantumVault 15kWh Solar Battery" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+          <div class="absolute inset-0 bg-gradient-to-t from-obsidian-950 via-transparent to-transparent"></div>
+          <span class="absolute top-4 left-4 px-3 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-[11px] font-mono text-cyan-300">
+            Solid-State LFP
+          </span>
+        </div>
+        <div class="p-6 flex-1 flex flex-col justify-between">
+          <div>
+            <h3 class="font-display text-xl font-bold text-white group-hover:text-cyan-400 transition-colors">
+              Nexus QuantumVault™
+            </h3>
+            <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+              15 kWh modular home energy battery with continuous 7.6 kW output. Features 8ms seamless blackout switchover and 10,000 deep cycle lifespan.
+            </p>
+            <div class="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-white/[0.06] text-xs font-mono">
+              <div>
+                <span class="text-slate-500 block text-[10px]">CAPACITY</span>
+                <span class="text-slate-200 font-semibold">15 kWh (Scalable to 60)</span>
+              </div>
+              <div>
+                <span class="text-slate-500 block text-[10px]">SWITCHOVER</span>
+                <span class="text-slate-200 font-semibold">8 ms (Uninterruptible)</span>
+              </div>
+            </div>
+          </div>
+          <button class="open-quote-modal mt-6 w-full py-2.5 rounded-xl border border-white/10 bg-white/[0.02] hover:bg-cyan-400/10 hover:border-cyan-400/40 text-xs font-medium text-white transition-all flex items-center justify-center gap-2">
+            <span>Configure Storage Vault</span>
+            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Card 3: AetherFlow™ Smart Energy Brain -->
+      <div class="glass-panel glass-panel-hover rounded-2xl overflow-hidden flex flex-col group p-6 justify-between bg-gradient-to-b from-white/[0.04] to-transparent">
+        <div>
+          <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 mb-6">
+            <i data-lucide="cpu" class="w-6 h-6"></i>
+          </div>
+          <span class="text-[11px] font-mono text-amber-400 uppercase tracking-wider">AI Microgrid Gateway</span>
+          <h3 class="font-display text-xl font-bold text-white mt-1">
+            AetherOS™ Neural Gateway
+          </h3>
+          <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+            The intelligent operating system that predicts weather patterns, learns household electricity habits, and executes automated wholesale arbitrage with your utility grid.
+          </p>
+
+          <div class="space-y-3 mt-6 text-xs text-slate-300">
+            <div class="flex items-center gap-2.5">
+              <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
+              <span>Automated peak-rate tariff avoidance</span>
+            </div>
+            <div class="flex items-center gap-2.5">
+              <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
+              <span>Bi-directional EV charging integration</span>
+            </div>
+            <div class="flex items-center gap-2.5">
+              <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
+              <span>Military-grade local encrypted controls</span>
+            </div>
+          </div>
+        </div>
+
+        <button class="open-quote-modal mt-8 w-full py-2.5 rounded-xl border border-white/10 bg-white/[0.02] hover:bg-amber-400/10 hover:border-amber-400/40 text-xs font-medium text-white transition-all flex items-center justify-center gap-2">
+          <span>Explore AetherOS</span>
+          <i data-lucide="chevron-right" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- ================= 24-HOUR INTERACTIVE SOLAR ENERGY SIMULATOR ================= -->
+  <section id="simulator-section" class="py-24 border-y border-white/[0.06] bg-obsidian-900/40 relative z-30">
+    <div class="max-w-7xl mx-auto px-6">
+      
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <span class="text-xs font-mono uppercase tracking-[0.25em] text-amber-400">Live Simulation</span>
+        <h2 class="font-display text-3xl md:text-5xl font-extrabold text-white mt-2">
+          24 Hours of Clean Independence.
+        </h2>
+        <p class="text-sm text-slate-400 mt-3">
+          Scrub the timeline below to witness how the Solaris ecosystem captures daylight flux, powers your estate, charges the Nexus Vault, and maintains zero grid consumption all night.
+        </p>
+      </div>
+
+      <!-- Simulator Interactive Cockpit -->
+      <div class="glass-panel rounded-3xl p-6 md:p-10 border border-white/10">
+        
+        <!-- Header status bar -->
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-6 border-b border-white/[0.08] gap-4">
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-300">
+              <i data-lucide="sun" class="w-6 h-6 animate-spin" style="animation-duration: 18s;"></i>
+            </div>
+            <div>
+              <span class="text-[10px] font-mono text-slate-400 uppercase tracking-widest">Current Virtual Time</span>
+              <div id="sim-time-display" class="font-display text-3xl font-extrabold text-white">12:30</div>
+            </div>
+          </div>
+          
+          <div class="flex items-center gap-3 px-4 py-2 rounded-xl bg-white/[0.03] border border-white/10">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span id="sim-phase-display" class="text-xs font-mono text-slate-200">Surplus Solar Charging Battery</span>
+          </div>
+        </div>
+
+        <!-- Sun Orbit Visual Arc -->
+        <div class="relative w-full h-24 my-8 overflow-hidden border-b border-white/[0.06]">
+          <div id="sim-sun-indicator" class="absolute w-8 h-8 rounded-full bg-amber-400 shadow-[0_0_30px_#f59e0b] -translate-x-1/2 flex items-center justify-center text-black font-bold transition-all duration-150" style="left: 50%; top: 10px;">
+            <i data-lucide="sun-medium" class="w-5 h-5"></i>
+          </div>
+          <div class="absolute inset-x-0 bottom-0 flex justify-between text-[10px] font-mono text-slate-500 pb-1">
+            <span>06:00 Sunrise</span>
+            <span>13:00 Peak Solar</span>
+            <span>19:30 Dusk</span>
+            <span>00:00 Midnight</span>
+          </div>
+        </div>
+
+        <!-- Metric Gauges Grid -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+          
+          <div class="p-4 rounded-xl bg-white/[0.02] border border-white/[0.06]">
+            <span class="text-[11px] font-mono text-amber-400 flex items-center gap-1.5">
+              <i data-lucide="zap" class="w-3.5 h-3.5"></i>
+              <span>Solar Roof Output</span>
+            </span>
+            <div id="sim-solar-kw" class="font-display text-2xl font-bold text-white mt-1">11.4 kW</div>
+            <span class="text-[10px] text-slate-400">Peak daylight flux</span>
+          </div>
+
+          <div class="p-4 rounded-xl bg-white/[0.02] border border-white/[0.06]">
+            <span class="text-[11px] font-mono text-cyan-400 flex items-center gap-1.5">
+              <i data-lucide="home" class="w-3.5 h-3.5"></i>
+              <span>Home Load</span>
+            </span>
+            <div id="sim-home-kw" class="font-display text-2xl font-bold text-white mt-1">4.2 kW</div>
+            <span class="text-[10px] text-slate-400">Active appliances & climate</span>
+          </div>
+
+          <div class="p-4 rounded-xl bg-white/[0.02] border border-white/[0.06]">
+            <span class="text-[11px] font-mono text-emerald-400 flex items-center gap-1.5">
+              <i data-lucide="battery-charging" class="w-3.5 h-3.5"></i>
+              <span>Nexus Vault Charge</span>
+            </span>
+            <div id="sim-battery-pct" class="font-display text-2xl font-bold text-white mt-1">94%</div>
+            <span class="text-[10px] text-slate-400">14.1 kWh stored</span>
+          </div>
+
+          <div class="p-4 rounded-xl bg-white/[0.02] border border-white/[0.06]">
+            <span class="text-[11px] font-mono text-purple-400 flex items-center gap-1.5">
+              <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+              <span>Grid Dependence</span>
+            </span>
+            <div id="sim-grid-kw" class="font-display text-2xl font-bold text-emerald-400 mt-1">0.0 kW</div>
+            <span class="text-[10px] text-slate-400">Self-sufficient microgrid</span>
+          </div>
+
+        </div>
+
+        <!-- Interactive Time Range Slider -->
+        <div class="mt-4">
+          <label for="sim-time-slider" class="text-xs font-mono text-slate-400 block mb-2">
+            Drag to adjust hour of the day:
+          </label>
+          <input id="sim-time-slider" type="range" min="6.0" max="24.0" step="0.25" value="12.5" class="w-full cursor-pointer accent-amber-400">
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= INTERACTIVE SOLAR SAVINGS CALCULATOR ================= -->
+  <section id="calculator-section" class="py-24 max-w-7xl mx-auto px-6 relative z-30">
+    
+    <div class="text-center max-w-2xl mx-auto mb-16">
+      <span class="text-xs font-mono uppercase tracking-[0.25em] text-amber-400">Financial Engineering</span>
+      <h2 class="font-display text-3xl md:text-5xl font-extrabold text-white mt-2">
+        Calculate Your 25-Year ROI.
+      </h2>
+      <p class="text-sm text-slate-400 mt-3">
+        See how much wealth you retain by redirecting monthly electric utility payments into an appreciating home infrastructure asset.
+      </p>
+    </div>
+
+    <!-- Calculator Card -->
+    <div class="glass-panel rounded-3xl p-6 md:p-12 border border-white/10 grid grid-cols-1 lg:grid-cols-12 gap-10">
+      
+      <!-- Inputs Column (7 cols) -->
+      <div class="lg:col-span-7 space-y-8">
+        
+        <!-- Input 1: Monthly Bill -->
+        <div>
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-xs font-mono uppercase tracking-wider text-slate-300">Average Monthly Electric Bill</span>
+            <span id="calc-bill-val" class="font-display text-2xl font-bold text-amber-400">$280</span>
+          </div>
+          <input id="calc-bill-slider" type="range" min="80" max="850" step="10" value="280" class="w-full accent-amber-400">
+          <div class="flex justify-between text-[10px] font-mono text-slate-500 mt-1">
+            <span>$80/mo</span>
+            <span>$450/mo</span>
+            <span>$850/mo</span>
+          </div>
+        </div>
+
+        <!-- Input 2: Home Size -->
+        <div>
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-xs font-mono uppercase tracking-wider text-slate-300">Home Living Area</span>
+            <span id="calc-home-val" class="font-display text-2xl font-bold text-slate-200">2,800 sq ft</span>
+          </div>
+          <input id="calc-home-slider" type="range" min="1200" max="6500" step="100" value="2800" class="w-full accent-amber-400">
+          <div class="flex justify-between text-[10px] font-mono text-slate-500 mt-1">
+            <span>1,200 sq ft</span>
+            <span>3,500 sq ft</span>
+            <span>6,500+ sq ft</span>
+          </div>
+        </div>
+
+        <!-- Input 3: Sun Region & Battery Select -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-white/[0.08]">
+          <div>
+            <label for="calc-region" class="text-xs font-mono uppercase tracking-wider text-slate-300 block mb-2">
+              Sunlight Exposure Region
+            </label>
+            <select id="calc-region" class="w-full px-4 py-3 rounded-xl bg-obsidian-900 border border-white/10 text-xs font-medium text-slate-200 outline-none focus:border-amber-400 transition-colors">
+              <option value="5.8" selected>Southwest / Sunbelt (High Solar)</option>
+              <option value="5.1">West Coast / Central Plains</option>
+              <option value="4.5">Southeast & Mid-Atlantic</option>
+              <option value="4.0">Northeast & Midwest</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="calc-battery" class="text-xs font-mono uppercase tracking-wider text-slate-300 block mb-2">
+              Battery Storage Units
+            </label>
+            <select id="calc-battery" class="w-full px-4 py-3 rounded-xl bg-obsidian-900 border border-white/10 text-xs font-medium text-slate-200 outline-none focus:border-amber-400 transition-colors">
+              <option value="1" selected>1x Nexus Vault (15 kWh Backup)</option>
+              <option value="2">2x Nexus Vault (30 kWh Whole-Home)</option>
+              <option value="0">Grid-Tied Only (No Battery)</option>
+            </select>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Results Column (5 cols) -->
+      <div class="lg:col-span-5 rounded-2xl bg-gradient-to-br from-amber-500/10 via-obsidian-900 to-obsidian-950 p-6 md:p-8 border border-amber-500/30 flex flex-col justify-between">
+        
+        <div>
+          <span class="text-[10px] font-mono uppercase tracking-[0.2em] text-amber-400/90 block">
+            Projected 25-Year Net Wealth Kept
+          </span>
+          <div id="calc-savings-total" class="font-display text-4xl md:text-5xl font-extrabold text-white mt-2 text-shadow-glow">
+            $84,620
+          </div>
+          <span class="text-xs text-slate-400 block mt-1">Calculated with 4.5% annual grid inflation</span>
+
+          <div class="space-y-4 mt-8 pt-6 border-t border-white/[0.08]">
+            <div class="flex justify-between items-center text-xs">
+              <span class="text-slate-400">System Capacity Needed:</span>
+              <span id="calc-system-size" class="font-mono font-bold text-white">9.6 kW DC</span>
+            </div>
+
+            <div class="flex justify-between items-center text-xs">
+              <span class="text-slate-400">30% Federal ITC Tax Credit:</span>
+              <span id="calc-tax-credit" class="font-mono font-bold text-amber-300">$10,450 Back</span>
+            </div>
+
+            <div class="flex justify-between items-center text-xs">
+              <span class="text-slate-400">Estimated Payback Period:</span>
+              <span id="calc-payback" class="font-mono font-bold text-emerald-400">4.8 Years</span>
+            </div>
+
+            <div class="flex justify-between items-center text-xs">
+              <span class="text-slate-400">CO₂ Emissions Offset:</span>
+              <span id="calc-co2" class="font-mono font-bold text-slate-200">142 Metric Tons</span>
+            </div>
+          </div>
+        </div>
+
+        <button id="calc-lock-in-btn" class="mt-8 w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-400 text-obsidian-950 font-bold text-xs uppercase tracking-wider hover:brightness-110 active:scale-95 transition-all shadow-[0_0_20px_rgba(245,158,11,0.35)] flex items-center justify-center gap-2">
+          <span>Lock In This Estimate & Proposal</span>
+          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </button>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- ================= ARCHITECTURAL COMPARISON ================= -->
+  <section id="comparison-section" class="py-24 border-t border-white/[0.06] bg-obsidian-900/30 relative z-30">
+    <div class="max-w-7xl mx-auto px-6">
+      
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <span class="text-xs font-mono uppercase tracking-[0.25em] text-amber-400">Engineering Superiority</span>
+        <h2 class="font-display text-3xl md:text-5xl font-extrabold text-white mt-2">
+          Solaris vs. Conventional Solar.
+        </h2>
+      </div>
+
+      <div class="glass-panel rounded-2xl overflow-x-auto border border-white/10">
+        <table class="w-full text-left text-xs md:text-sm">
+          <thead>
+            <tr class="border-b border-white/[0.08] text-slate-400 font-mono text-[11px] uppercase tracking-wider">
+              <th class="p-6">Feature Matrix</th>
+              <th class="p-6 text-amber-400 font-bold bg-amber-500/[0.04]">Solaris Quantum Shingles</th>
+              <th class="p-6">Standard Racked Solar Panels</th>
+              <th class="p-6">Utility Grid Alone</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-white/[0.06] text-slate-300">
+            <tr>
+              <td class="p-6 font-medium text-white">Visual Aesthetic</td>
+              <td class="p-6 text-amber-300 font-semibold bg-amber-500/[0.04]">Seamless Architectural Flush Glass</td>
+              <td class="p-6 text-slate-400">Bulky Racks, Visible Clamps & Wires</td>
+              <td class="p-6 text-slate-500">N/A</td>
+            </tr>
+            <tr>
+              <td class="p-6 font-medium text-white">Storm & Hail Durability</td>
+              <td class="p-6 text-amber-300 font-semibold bg-amber-500/[0.04]">Class 4 (2" Hail @ 135 MPH)</td>
+              <td class="p-6 text-slate-400">Class 2 (Fragile Mounting Rails)</td>
+              <td class="p-6 text-slate-500">Prone to Power Outages</td>
+            </tr>
+            <tr>
+              <td class="p-6 font-medium text-white">Roof Penetrations</td>
+              <td class="p-6 text-amber-300 font-semibold bg-amber-500/[0.04]">0 Penetrations (Is The Roof)</td>
+              <td class="p-6 text-slate-400">40+ Holes Lagged into Rafters</td>
+              <td class="p-6 text-slate-500">None</td>
+            </tr>
+            <tr>
+              <td class="p-6 font-medium text-white">Property Value Increase</td>
+              <td class="p-6 text-amber-300 font-semibold bg-amber-500/[0.04]">+6.8% Average Valuation Boost</td>
+              <td class="p-6 text-slate-400">+2.5% (Often Visual Liability)</td>
+              <td class="p-6 text-slate-500">0%</td>
+            </tr>
+            <tr>
+              <td class="p-6 font-medium text-white">25-Year Price Guarantee</td>
+              <td class="p-6 text-amber-300 font-semibold bg-amber-500/[0.04]">Locked at $0.00 / kWh</td>
+              <td class="p-6 text-slate-400">Locked partially</td>
+              <td class="p-6 text-red-400">+4.5% Compounding Every Year</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= TESTIMONIALS & CASE STUDIES ================= -->
+  <section class="py-24 max-w-7xl mx-auto px-6 relative z-30">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      
+      <div class="glass-panel p-8 rounded-2xl border border-white/10 flex flex-col justify-between">
+        <div>
+          <div class="flex text-amber-400 gap-1 mb-4">
+            <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+          </div>
+          <p class="text-xs text-slate-300 leading-relaxed italic">
+            "We wanted solar without turning our custom modern home into an industrial eye-sore. Solaris Prism-Tiles look identical to luxury matte slate. Neighbors literally have no idea it's generating 14 kW."
+          </p>
+        </div>
+        <div class="mt-6 pt-4 border-t border-white/[0.06]">
+          <span class="font-display font-bold text-sm text-white block">Dr. Marcus & Elena Vance</span>
+          <span class="text-[11px] font-mono text-amber-400">Paradise Valley, AZ • 16.2 kW Roof + 2x Vault</span>
+        </div>
+      </div>
+
+      <div class="glass-panel p-8 rounded-2xl border border-white/10 flex flex-col justify-between">
+        <div>
+          <div class="flex text-amber-400 gap-1 mb-4">
+            <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+          </div>
+          <p class="text-xs text-slate-300 leading-relaxed italic">
+            "During the last hurricane, our entire neighborhood lost grid power for 5 days. Our Nexus Vault kicked on in 8 milliseconds. We ran AC, refrigerated medicine, and charged two Teslas effortlessly."
+          </p>
+        </div>
+        <div class="mt-6 pt-4 border-t border-white/[0.06]">
+          <span class="font-display font-bold text-sm text-white block">Julian Thorne</span>
+          <span class="text-[11px] font-mono text-cyan-400">Boca Raton, FL • 18.5 kW Roof + 3x Vault</span>
+        </div>
+      </div>
+
+      <div class="glass-panel p-8 rounded-2xl border border-white/10 flex flex-col justify-between">
+        <div>
+          <div class="flex text-amber-400 gap-1 mb-4">
+            <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+          </div>
+          <p class="text-xs text-slate-300 leading-relaxed italic">
+            "Our summer electric bills were averaging $640/month. Last month our bill was $12.40 (just grid connection fee). Solaris took care of the permits, HOA clearance, and 30% tax rebate docs."
+          </p>
+        </div>
+        <div class="mt-6 pt-4 border-t border-white/[0.06]">
+          <span class="font-display font-bold text-sm text-white block">Kavita Deshmukh</span>
+          <span class="text-[11px] font-mono text-emerald-400">Austin, TX • 12.8 kW Roof + 1x Vault</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= 3D ROOF SURVEY & QUOTE WIZARD MODAL ================= -->
+  <div id="quote-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl hidden">
+    
+    <div class="relative w-full max-w-xl glass-panel rounded-3xl p-6 md:p-8 border border-white/20 shadow-2xl overflow-hidden">
+      
+      <!-- Close Button -->
+      <button id="close-modal-btn" class="absolute top-5 right-5 w-9 h-9 rounded-full bg-white/[0.05] border border-white/10 flex items-center justify-center text-slate-400 hover:text-white transition-colors" aria-label="Close Modal">
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+
+      <!-- Modal Body (Wizard) -->
+      <div id="modal-wizard-body">
+        
+        <!-- Step Indicator -->
+        <div class="flex items-center gap-2 mb-6">
+          <div class="step-pill px-3 py-1 rounded-full text-[10px] font-mono font-bold bg-amber-400 text-black">1. Property</div>
+          <div class="step-pill px-3 py-1 rounded-full text-[10px] font-mono font-bold bg-white/10 text-white/40">2. Roof Specs</div>
+          <div class="step-pill px-3 py-1 rounded-full text-[10px] font-mono font-bold bg-white/10 text-white/40">3. System Plan</div>
+        </div>
+
+        <h3 class="font-display text-2xl font-bold text-white">
+          Design Your 3D Solar System
+        </h3>
+        <p class="text-xs text-slate-400 mt-1">
+          Instant high-resolution satellite roof assessment with guaranteed tax credit estimation.
+        </p>
+
+        <!-- Form Steps -->
+        <form id="quote-wizard-form" class="mt-6 space-y-4">
+          
+          <!-- Step 1 Panel -->
+          <div class="modal-step-panel space-y-4" data-step="1">
+            <div>
+              <label class="text-xs font-mono text-slate-300 block mb-1">Property Street Address</label>
+              <input type="text" placeholder="e.g. 742 Evergreen Terrace" class="w-full px-4 py-3 rounded-xl bg-obsidian-900 border border-white/10 text-xs text-white outline-none focus:border-amber-400 transition-colors" value="4820 Grandview Ridge Dr">
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="text-xs font-mono text-slate-300 block mb-1">City, State</label>
+                <input type="text" placeholder="Scottsdale, AZ" class="w-full px-4 py-3 rounded-xl bg-obsidian-900 border border-white/10 text-xs text-white outline-none focus:border-amber-400 transition-colors" value="Scottsdale, AZ">
+              </div>
+              <div>
+                <label class="text-xs font-mono text-slate-300 block mb-1">Postal ZIP</label>
+                <input type="text" placeholder="85255" class="w-full px-4 py-3 rounded-xl bg-obsidian-900 border border-white/10 text-xs text-white outline-none focus:border-amber-400 transition-colors" value="85255">
+              </div>
+            </div>
+            <div>
+              <label class="text-xs font-mono text-slate-300 block mb-1">Current Electric Utility Provider</label>
+              <input type="text" placeholder="e.g. APS / PG&E / Duke Energy" class="w-full px-4 py-3 rounded-xl bg-obsidian-900 border border-white/10 text-xs text-white outline-none focus:border-amber-400 transition-colors" value="Arizona Public Service (APS)">
+            </div>
+          </div>
+
+          <!-- Step 2 Panel -->
+          <div class="modal-step-panel space-y-4 hidden" data-step="2">
+            <div>
+              <label class="text-xs font-mono text-slate-300 block mb-1">Existing Roof Material</label>
+              <select class="w-full px-4 py-3 rounded-xl bg-obsidian-900 border border-white/10 text-xs text-white outline-none focus:border-amber-400 transition-colors">
+                <option>Asphalt Architectural Shingles</option>
+                <option>Concrete / Clay S-Tile</option>
+                <option>Standing Seam Metal</option>
+                <option>Flat / Commercial Membrane</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-xs font-mono text-slate-300 block mb-1">Estimated Monthly Electricity Bill ($)</label>
+              <input id="modal-monthly-bill" type="number" value="280" class="w-full px-4 py-3 rounded-xl bg-obsidian-900 border border-white/10 text-xs text-white outline-none focus:border-amber-400 transition-colors">
+            </div>
+            <div>
+              <label class="text-xs font-mono text-slate-300 block mb-1">Tree Shading Level</label>
+              <div class="grid grid-cols-3 gap-2">
+                <label class="p-3 rounded-xl border border-white/10 bg-white/[0.02] text-center text-xs cursor-pointer hover:border-amber-400">
+                  <input type="radio" name="shading" checked class="hidden">
+                  <span class="block font-semibold">Zero Shade</span>
+                  <span class="text-[10px] text-slate-500">100% Sun</span>
+                </label>
+                <label class="p-3 rounded-xl border border-white/10 bg-white/[0.02] text-center text-xs cursor-pointer hover:border-amber-400">
+                  <input type="radio" name="shading" class="hidden">
+                  <span class="block font-semibold">Partial</span>
+                  <span class="text-[10px] text-slate-500">Morning/Evening</span>
+                </label>
+                <label class="p-3 rounded-xl border border-white/10 bg-white/[0.02] text-center text-xs cursor-pointer hover:border-amber-400">
+                  <input type="radio" name="shading" class="hidden">
+                  <span class="block font-semibold">Heavy</span>
+                  <span class="text-[10px] text-slate-500">Tree Canopy</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3 Panel -->
+          <div class="modal-step-panel space-y-4 hidden" data-step="3">
+            <div>
+              <label class="text-xs font-mono text-slate-300 block mb-1">Full Name</label>
+              <input type="text" placeholder="Johnathan Doe" class="w-full px-4 py-3 rounded-xl bg-obsidian-900 border border-white/10 text-xs text-white outline-none focus:border-amber-400 transition-colors">
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="text-xs font-mono text-slate-300 block mb-1">Email Address</label>
+                <input type="email" placeholder="john@example.com" class="w-full px-4 py-3 rounded-xl bg-obsidian-900 border border-white/10 text-xs text-white outline-none focus:border-amber-400 transition-colors">
+              </div>
+              <div>
+                <label class="text-xs font-mono text-slate-300 block mb-1">Mobile Phone (for 3D Scan SMS)</label>
+                <input type="tel" placeholder="(555) 000-0000" class="w-full px-4 py-3 rounded-xl bg-obsidian-900 border border-white/10 text-xs text-white outline-none focus:border-amber-400 transition-colors">
+              </div>
+            </div>
+            <div class="p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-xs text-amber-300 flex items-center gap-2">
+              <i data-lucide="shield-alert" class="w-4 h-4 shrink-0"></i>
+              <span>Your preliminary 3D scan qualifies for the 30% Federal ITC Tax Credit.</span>
+            </div>
+          </div>
+
+          <!-- Wizard Navigation Buttons -->
+          <div class="flex items-center justify-between pt-6 border-t border-white/[0.08]">
+            <button id="modal-prev-btn" type="button" class="px-5 py-2.5 rounded-xl border border-white/10 text-xs text-slate-300 hover:text-white transition-colors hidden">
+              Back
+            </button>
+            <button id="modal-next-btn" type="button" class="ml-auto px-6 py-2.5 rounded-xl bg-amber-400 text-obsidian-950 font-bold text-xs uppercase tracking-wider hover:brightness-110 active:scale-95 transition-all shadow-lg">
+              Continue Next
+            </button>
+          </div>
+
+        </form>
+
+      </div>
+
+      <!-- Success Screen State -->
+      <div id="modal-success-screen" class="hidden text-center py-8">
+        <div class="w-16 h-16 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center mx-auto mb-4">
+          <i data-lucide="check" class="w-8 h-8"></i>
+        </div>
+        <h3 class="font-display text-2xl font-bold text-white">
+          3D Roof Engineering Scan Initiated!
+        </h3>
+        <p class="text-xs text-slate-300 max-w-sm mx-auto mt-2 leading-relaxed">
+          Our LiDAR satellite system is analyzing your roof pitch, sun hours, and azimuth. We have sent your preliminary proposal to your email.
+        </p>
+        <div class="mt-6 p-4 rounded-xl bg-white/[0.03] border border-white/10 max-w-xs mx-auto text-left text-xs font-mono space-y-1">
+          <div class="text-slate-400">Solar Potential: <span class="text-emerald-400 font-bold">98/100 (Exceptional)</span></div>
+          <div class="text-slate-400">Est. 25-Yr Net Gain: <span class="text-amber-300 font-bold">$84,620</span></div>
+          <div class="text-slate-400">Fed ITC Rebate: <span class="text-white font-bold">$10,450</span></div>
+        </div>
+        <button onclick="document.getElementById('quote-modal').classList.add('hidden')" class="mt-8 px-6 py-2.5 rounded-full bg-white/[0.08] hover:bg-white/20 text-xs text-white font-semibold transition-colors">
+          Return to Experience
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="border-t border-white/[0.08] bg-obsidian-950 py-16 relative z-30">
+    <div class="max-w-7xl mx-auto px-6">
+      
+      <div class="grid grid-cols-1 md:grid-cols-5 gap-10 pb-12 border-b border-white/[0.06]">
+        
+        <!-- Brand summary (2 cols) -->
+        <div class="md:col-span-2">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full border border-amber-400/40 bg-gradient-to-tr from-amber-500/20 to-transparent flex items-center justify-center relative overflow-hidden">
+              <div class="w-4 h-4 rounded-full bg-amber-400"></div>
+              <div class="w-3 h-3 rounded-full bg-obsidian-950 absolute -top-1 -right-1"></div>
+            </div>
+            <span class="font-display font-extrabold text-lg text-white">SOLARIS QUANTUM</span>
+          </div>
+          <p class="text-xs text-slate-400 mt-3 max-w-sm leading-relaxed">
+            Pioneering the intersection of luxury architecture and quantum photovoltaic energy storage. Uncompromising aesthetics, lifelong clean power independence.
+          </p>
+          <div class="flex items-center gap-4 mt-6 text-slate-400 text-xs font-mono">
+            <span>NABCEP Certified</span>
+            <span>•</span>
+            <span>UL 1703 Tier-1</span>
+            <span>•</span>
+            <span>Class A Fire</span>
+          </div>
+        </div>
+
+        <!-- Links 1 -->
+        <div>
+          <span class="text-xs font-mono uppercase tracking-wider text-white block mb-4">Architecture</span>
+          <ul class="space-y-2 text-xs text-slate-400">
+            <li><a href="#" class="hover:text-amber-400 transition-colors">Prism-Tile™ Shingles</a></li>
+            <li><a href="#" class="hover:text-amber-400 transition-colors">Commercial Solar Glass</a></li>
+            <li><a href="#" class="hover:text-amber-400 transition-colors">Solar Pergolas & Canopies</a></li>
+            <li><a href="#" class="hover:text-amber-400 transition-colors">Hail Durability Lab</a></li>
+          </ul>
+        </div>
+
+        <!-- Links 2 -->
+        <div>
+          <span class="text-xs font-mono uppercase tracking-wider text-white block mb-4">Energy Vaults</span>
+          <ul class="space-y-2 text-xs text-slate-400">
+            <li><a href="#" class="hover:text-amber-400 transition-colors">Nexus 15kWh Storage</a></li>
+            <li><a href="#" class="hover:text-amber-400 transition-colors">Twin Vault 30kWh</a></li>
+            <li><a href="#" class="hover:text-amber-400 transition-colors">AetherOS™ AI Microgrid</a></li>
+            <li><a href="#" class="hover:text-amber-400 transition-colors">Vehicle-to-Home EV</a></li>
+          </ul>
+        </div>
+
+        <!-- Links 3 -->
+        <div>
+          <span class="text-xs font-mono uppercase tracking-wider text-white block mb-4">Company</span>
+          <ul class="space-y-2 text-xs text-slate-400">
+            <li><a href="#" class="hover:text-amber-400 transition-colors">Architectural Portfolio</a></li>
+            <li><a href="#" class="hover:text-amber-400 transition-colors">30% Federal ITC Guide</a></li>
+            <li><a href="#" class="hover:text-amber-400 transition-colors">Certified Installers</a></li>
+            <li><a href="#" class="hover:text-amber-400 transition-colors">Contact Concierge</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="flex flex-col sm:flex-row items-center justify-between pt-8 text-[11px] font-mono text-slate-500 gap-4">
+        <span>© 2026 Solaris Quantum Energy Inc. All Rights Reserved.</span>
+        <div class="flex items-center gap-6">
+          <a href="#" class="hover:text-slate-300">Privacy Policy</a>
+          <a href="#" class="hover:text-slate-300">Terms of Service</a>
+          <a href="#" class="hover:text-slate-300">Patent Portfolio</a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- Application Logic -->
+  <script src="./app.js"></script>
+</body>
+</html>
