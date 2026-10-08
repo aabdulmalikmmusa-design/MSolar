@@ -1,6 +1,7 @@
 /**
- * SOLARIS QUANTUM - Advanced 3D Solar UI/UX
+ * SOLARIS NIGERIA - Premium 3D Solar & Inverter Selling UI/UX
  * Interactive Refraction Glass Cube with Chromatic Aberration & Rolling Physics
+ * Tailored for Nigerian Homes, Duplexes, and Businesses
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -57,43 +58,40 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // --- SLIDE DATA (matches reference format) ---
+  // --- NIGERIAN SOLAR SLIDE DATA (3 PAGES OF SLIDE ANIMATION) ---
   const slides = [
     {
       index: '01',
-      line1: 'HARVEST',
-      line2: 'PURE',
-      line3: 'LIGHT',
-      tagline: 'We Capture Worlds Born from Sun.',
-      description: 'Next-Gen Photovoltaic Architecture. Aerospace-grade silicon capturing 24.8% pure solar flux.',
-      category: 'Photovoltaics',
-      metricVal: '24.8%',
-      metricLabel: 'Peak Cell Efficiency',
-      accentColor: '#f59e0b',
+      title: 'Get your durable Solar',
+      lines: ['GET YOUR', 'DURABLE SOLAR'],
+      tagline: 'Get your durable Solar',
+      description: 'High-yield Monocrystalline Solar Panels & Smart Hybrid Inverters delivering uninterrupted clean electricity across Nigeria.',
+      category: 'Complete Solar Bundles',
+      metricVal: '24/7',
+      metricLabel: 'Continuous Light',
+      accentColor: '#FFF1A6',
     },
     {
       index: '02',
-      line1: 'STORING',
-      line2: 'ZERO',
-      line3: 'CARBON',
-      tagline: 'We Forge Resilience from Void.',
-      description: 'Nexus Solid-State Storage. 15kWh scalable LFP battery with 8ms instant blackout shield.',
-      category: 'Nexus Battery',
-      metricVal: '100%',
-      metricLabel: 'Grid Independence',
-      accentColor: '#06b6d4',
+      title: 'We offer the best service',
+      lines: ['WE OFFER THE', 'BEST SERVICE'],
+      tagline: 'We offer the best service',
+      description: 'Certified NEMSA & COREN engineering installation with 5-year comprehensive inverter warranties nationwide.',
+      category: 'Professional Installation',
+      metricVal: '10+ Yrs',
+      metricLabel: 'Battery Lifespan',
+      accentColor: '#FFF1A6',
     },
     {
       index: '03',
-      line1: 'POWERING',
-      line2: 'SMART',
-      line3: 'GRIDS',
-      tagline: 'We Orchestrate Autonomous Energy.',
-      description: 'Autonomous Microgrid Optimization. AI-driven peak shaving and automated wholesale energy export.',
-      category: 'Smart Grid',
-      metricVal: '$0.00',
-      metricLabel: 'Net Electric Utility Cost',
-      accentColor: '#10b981',
+      title: 'Durable Solar services here',
+      lines: ['DURABLE SOLAR', 'SERVICES HERE'],
+      tagline: 'Durable Solar services here',
+      description: 'End generator fuel costs and enjoy tier-1 lithium power built to last for decades in tropical Nigerian weather.',
+      category: 'Generator Fuel Savings',
+      metricVal: '₦3.6M+',
+      metricLabel: 'Annual Cash Saved',
+      accentColor: '#FFF1A6',
     },
   ];
 
@@ -105,8 +103,11 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!container) return;
 
   const scene = new THREE.Scene();
+  scene.background = new THREE.Color('#FFF1A6'); // Pure milky Soft Butter scene background
+
+  const isMobileInit = container.clientWidth < 768;
   const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 100);
-  camera.position.set(0, 0, 8.5);
+  camera.position.set(0, 0, isMobileInit ? 11.2 : 8.5);
 
   const renderer = new THREE.WebGLRenderer({
     antialias: true,
@@ -115,88 +116,62 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   renderer.setSize(container.clientWidth, container.clientHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.1;
+  renderer.setClearColor(0xFFF1A6, 1); // Never clear to black!
+  renderer.toneMapping = THREE.LinearToneMapping;
+  renderer.toneMappingExposure = 1.0;
   container.appendChild(renderer.domElement);
   renderer.domElement.id = 'webgl-canvas';
 
-  // --- OFFSCREEN CANVAS FOR SHARP TYPOGRAPHY & REFRACTION TEXTURE ---
+  // --- OFFSCREEN CANVAS FOR 22cm x 15cm TYPOGRAPHY & REFRACTION TEXTURE ---
   const textCanvas = document.createElement('canvas');
-  textCanvas.width = 2048;
-  textCanvas.height = 1536;
+  textCanvas.width = 2200;
+  textCanvas.height = 1500;
   const ctx = textCanvas.getContext('2d');
 
   function renderTextCanvas(slide, crossfadeAlpha = 1.0, prevSlide = null) {
     ctx.clearRect(0, 0, textCanvas.width, textCanvas.height);
 
-    // Deep cosmic background
+    // Soft radiant butter glow around typography for high legibility over faded solar panels
     const bgGrad = ctx.createRadialGradient(
       textCanvas.width * 0.5,
       textCanvas.height * 0.5,
-      100,
+      120,
       textCanvas.width * 0.5,
       textCanvas.height * 0.5,
-      textCanvas.width * 0.7
+      textCanvas.width * 0.48
     );
-    bgGrad.addColorStop(0, '#0c0e17');
-    bgGrad.addColorStop(0.6, '#07080c');
-    bgGrad.addColorStop(1, '#050608');
+    bgGrad.addColorStop(0, 'rgba(255, 241, 166, 0.85)');
+    bgGrad.addColorStop(0.6, 'rgba(255, 241, 166, 0.45)');
+    bgGrad.addColorStop(1, 'rgba(255, 241, 166, 0)');
     ctx.fillStyle = bgGrad;
     ctx.fillRect(0, 0, textCanvas.width, textCanvas.height);
 
-    // Subtle solar energy grid lines
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.025)';
-    ctx.lineWidth = 1;
-    const gridSpacing = 120;
-    for (let x = 0; x < textCanvas.width; x += gridSpacing) {
-      ctx.beginPath();
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x, textCanvas.height);
-      ctx.stroke();
-    }
-    for (let y = 0; y < textCanvas.height; y += gridSpacing) {
-      ctx.beginPath();
-      ctx.moveTo(0, y);
-      ctx.lineTo(textCanvas.width, y);
-      ctx.stroke();
-    }
-
-    // Warm solar flare behind the center typography
-    const flare = ctx.createRadialGradient(
-      textCanvas.width * 0.5,
-      textCanvas.height * 0.5,
-      30,
-      textCanvas.width * 0.5,
-      textCanvas.height * 0.5,
-      480
-    );
-    flare.addColorStop(0, 'rgba(245, 158, 11, 0.16)');
-    flare.addColorStop(0.5, 'rgba(234, 88, 12, 0.05)');
-    flare.addColorStop(1, 'rgba(0, 0, 0, 0)');
-    ctx.fillStyle = flare;
-    ctx.fillRect(0, 0, textCanvas.width, textCanvas.height);
-
-    // Draw typography
+    // Draw typography function (Bold & Moderate inside 22cm x 15cm aspect ratio)
     function drawSlideText(s, alpha) {
       ctx.save();
       ctx.globalAlpha = alpha;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.font = '800 240px "Syne", sans-serif';
 
       const centerX = textCanvas.width * 0.5;
       const centerY = textCanvas.height * 0.5;
-      const lineHeight = 250;
 
-      // Glow pass
-      ctx.shadowColor = 'rgba(245, 158, 11, 0.35)';
-      ctx.shadowBlur = 30;
-      ctx.fillStyle = '#ffffff';
+      // Glow pass in warm Clay Brown
+      ctx.shadowColor = 'rgba(107, 53, 42, 0.16)';
+      ctx.shadowBlur = 18;
+      ctx.fillStyle = '#6B352A'; // Clay Brown
 
-      // 3 Stacked Words (matching "shaping Raw Forms")
-      ctx.fillText(s.line1, centerX, centerY - lineHeight);
-      ctx.fillText(s.line2, centerX, centerY);
-      ctx.fillText(s.line3, centerX, centerY + lineHeight);
+      // Bold and human realistic Courier typography (comfortably fits 22cm x 15cm)
+      const fontSize = 140;
+      ctx.font = `700 ${fontSize}px "Courier Prime", "Courier New", Courier, monospace`;
+
+      if (s.lines && s.lines.length === 2) {
+        const lineOffset = 100;
+        ctx.fillText(s.lines[0], centerX, centerY - lineOffset);
+        ctx.fillText(s.lines[1], centerX, centerY + lineOffset);
+      } else {
+        ctx.fillText(s.title || s.line1, centerX, centerY);
+      }
 
       ctx.restore();
     }
@@ -210,21 +185,90 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initial draw
   renderTextCanvas(slides[0]);
 
+  // Re-draw once custom web fonts are fully loaded to guarantee crisp Courier weight
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(() => {
+      renderTextCanvas(slides[currentSlideIndex]);
+      if (textTexture) textTexture.needsUpdate = true;
+    });
+  }
+
   const textTexture = new THREE.CanvasTexture(textCanvas);
   textTexture.minFilter = THREE.LinearFilter;
   textTexture.magFilter = THREE.LinearFilter;
   textTexture.generateMipmaps = false;
 
-  // Background Plane in 3D Scene
-  const bgGeometry = new THREE.PlaneGeometry(16, 12);
+  // --- FADED SOLAR PANELS WATERMARK BACKGROUND TEXTURE ---
+  const textureLoader = new THREE.TextureLoader();
+  const solarBgTex = textureLoader.load('./assets/solar_panels_hero_bg.jpg', () => {
+    solarBgTex.needsUpdate = true;
+    if (renderer && scene && camera) {
+      renderer.render(scene, camera);
+    }
+  });
+  solarBgTex.minFilter = THREE.LinearFilter;
+  solarBgTex.magFilter = THREE.LinearFilter;
+
+  // Background Plane in 3D Scene - oversized plane displaying faded solar panels
+  const bgGeometry = new THREE.PlaneGeometry(36, 22);
   const bgMaterial = new THREE.MeshBasicMaterial({
-    map: textTexture,
+    map: solarBgTex,
+    transparent: true,
+    opacity: 0.32, // Clearly visible faded solar panels so visitors immediately identify solar company
     depthWrite: false,
     depthTest: false,
   });
   const bgMesh = new THREE.Mesh(bgGeometry, bgMaterial);
-  bgMesh.position.set(0, 0, -2);
+  bgMesh.position.set(0, 0, -3.2);
   scene.add(bgMesh);
+
+  // Dedicated Write-up Mesh - mathematically sized to exactly 22cm width x 15cm height on screen
+  const textGeometry = new THREE.PlaneGeometry(1, 1);
+  const textMaterial = new THREE.MeshBasicMaterial({
+    map: textTexture,
+    transparent: true,
+    depthWrite: false,
+  });
+  const textMesh = new THREE.Mesh(textGeometry, textMaterial);
+  textMesh.position.set(0, 0, -2);
+  scene.add(textMesh);
+
+  function updateTextMeshSize() {
+    if (!container) return;
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+    const isMobile = width < 768;
+
+    let targetWidthPx;
+    let targetHeightPx;
+
+    if (isMobile) {
+      // Mobile responsive sizing: enlarged for mobile clarity while fitting inside refraction prism
+      targetWidthPx = width * 0.78;
+      targetHeightPx = targetWidthPx * (1500 / 2200); // maintain 22:15 aspect ratio
+    } else {
+      // Desktop: mathematically exact 22cm width x 15cm height
+      const cmToPx = 96 / 2.54; // 37.79527559 px/cm
+      targetWidthPx = 22 * cmToPx; // 831.50 px (22cm)
+      targetHeightPx = 15 * cmToPx; // 566.93 px (15cm)
+
+      const maxAllowedWidth = Math.min(width * 0.90, targetWidthPx);
+      const maxAllowedHeight = Math.min(height * 0.85, targetHeightPx);
+      const scaleFactor = Math.min(maxAllowedWidth / targetWidthPx, maxAllowedHeight / targetHeightPx, 1.0);
+      targetWidthPx *= scaleFactor;
+      targetHeightPx *= scaleFactor;
+    }
+
+    const dist = camera.position.z - textMesh.position.z;
+    const vFovRad = (camera.fov * Math.PI) / 360;
+    const visibleHeightUnits = 2 * Math.tan(vFovRad) * dist;
+    const unitsPerPixel = visibleHeightUnits / height;
+
+    const planeW = targetWidthPx * unitsPerPixel;
+    const planeH = targetHeightPx * unitsPerPixel;
+    textMesh.scale.set(planeW, planeH, 1);
+  }
+  updateTextMeshSize();
 
   // Render Target for Refraction
   const renderTarget = new THREE.WebGLRenderTarget(container.clientWidth * 1.5, container.clientHeight * 1.5, {
@@ -234,7 +278,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // --- 3D ROUNDED CUBE WITH GLASS REFRACTION & CHROMATIC ABERRATION SHADER ---
-  // Create rounded cube geometry using THREE.RoundedBoxGeometry
   let cubeGeometry;
   if (THREE.RoundedBoxGeometry) {
     cubeGeometry = new THREE.RoundedBoxGeometry(3.1, 3.1, 3.1, 8, 0.48);
@@ -242,12 +285,12 @@ document.addEventListener('DOMContentLoaded', () => {
     cubeGeometry = new THREE.BoxGeometry(3.0, 3.0, 3.0, 16, 16, 16);
   }
 
-  // Refraction + Chromatic Aberration Shader
+  // Refraction + Chromatic Aberration Shader for Milky Canvas
   const glassUniforms = {
     uTexture: { value: renderTarget.texture },
     uResolution: { value: new THREE.Vector2(container.clientWidth, container.clientHeight) },
-    uRefraction: { value: 0.125 }, // refractive bending
-    uChromaticAberration: { value: 0.048 }, // dispersion (rainbow RGB split)
+    uRefraction: { value: 0.11 }, // refractive bending
+    uChromaticAberration: { value: 0.024 }, // clean dispersion on light background
     uTime: { value: 0.0 },
     uLightPos: { value: new THREE.Vector3(4.0, 6.0, 7.0) },
   };
@@ -292,12 +335,12 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Lens curvature barrel distortion
         vec2 centerOffset = screenUV - vec2(0.5);
-        distortion += centerOffset * dot(distortion, distortion) * 1.8;
+        distortion += centerOffset * dot(distortion, distortion) * 1.5;
         
         // Chromatic Aberration (dispersion separates Red, Green, Blue)
-        float rOffset = 1.0 + uChromaticAberration * 2.8;
+        float rOffset = 1.0 + uChromaticAberration * 2.2;
         float gOffset = 1.0;
-        float bOffset = 1.0 - uChromaticAberration * 2.8;
+        float bOffset = 1.0 - uChromaticAberration * 2.2;
         
         vec2 uvR = clamp(screenUV + distortion * rOffset, 0.001, 0.999);
         vec2 uvG = clamp(screenUV + distortion * gOffset, 0.001, 0.999);
@@ -312,21 +355,21 @@ document.addEventListener('DOMContentLoaded', () => {
         vec3 lightDir = normalize(uLightPos - vWorldPosition);
         vec3 halfDir = normalize(lightDir + viewDir);
         float NdotH = max(dot(normal, halfDir), 0.0);
-        float specular = pow(NdotH, 45.0) * 1.95;
+        float specular = pow(NdotH, 45.0) * 1.35;
         
-        // Secondary soft solar rim light
+        // Secondary soft rim light
         vec3 lightDir2 = normalize(vec3(-4.0, 4.0, 5.0));
         vec3 halfDir2 = normalize(lightDir2 + viewDir);
-        float specular2 = pow(max(dot(normal, halfDir2), 0.0), 22.0) * 0.5;
+        float specular2 = pow(max(dot(normal, halfDir2), 0.0), 22.0) * 0.35;
         
         // Fresnel Edge Sheen (glinting border of crystal quartz)
-        float fresnel = pow(1.0 - max(dot(normal, viewDir), 0.0), 2.8);
+        float fresnel = pow(1.0 - max(dot(normal, viewDir), 0.0), 2.5);
         
-        // Subtle solar golden prism iridescence
-        vec3 prismTint = vec3(1.0, 0.98, 0.94);
-        vec3 edgeGlow = vec3(0.96, 0.65, 0.2) * fresnel * 0.35;
+        vec3 refracted = vec3(r, g, b);
+        vec3 highlights = (specular + specular2) * vec3(1.0, 1.0, 1.0);
+        vec3 edgeRim = vec3(0.42, 0.208, 0.165) * fresnel * 0.35;
         
-        vec3 finalColor = vec3(r, g, b) * prismTint + (specular + specular2) * vec3(1.0, 1.0, 1.0) + fresnel * vec3(0.35, 0.45, 0.65) + edgeGlow;
+        vec3 finalColor = refracted + highlights * 0.45 - edgeRim * 0.15 + fresnel * vec3(0.1, 0.06, 0.03);
         
         gl_FragColor = vec4(finalColor, 1.0);
       }
@@ -336,10 +379,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const glassCube = new THREE.Mesh(cubeGeometry, glassMaterial);
   glassCube.position.set(0, 0, 1.2);
+  const cubeScaleInit = isMobileInit ? 0.88 : 1.0;
+  glassCube.scale.set(cubeScaleInit, cubeScaleInit, cubeScaleInit);
   scene.add(glassCube);
 
-  // Subtle floating solar quantum particles
-  const particleCount = 60;
+  // Subtle floating clay brown particles
+  const particleCount = 55;
   const particleGeo = new THREE.BufferGeometry();
   const particlePos = new Float32Array(particleCount * 3);
   for (let i = 0; i < particleCount * 3; i += 3) {
@@ -349,11 +394,11 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePos, 3));
   const particleMat = new THREE.PointsMaterial({
-    color: 0xf59e0b,
-    size: 0.06,
+    color: 0x6B352A,
+    size: 0.055,
     transparent: true,
-    opacity: 0.45,
-    blending: THREE.AdditiveBlending,
+    opacity: 0.35,
+    blending: THREE.NormalBlending,
   });
   const particles = new THREE.Points(particleGeo, particleMat);
   scene.add(particles);
@@ -366,7 +411,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let mouseTilt = { x: 0, y: 0 };
   let targetTilt = { x: 0, y: 0 };
 
-  // Initial tilt (matching angle in screenshot 1)
+  // Initial tilt (matching reference angle)
   glassCube.rotation.x = 0.42;
   glassCube.rotation.y = 0.55;
   glassCube.rotation.z = -0.15;
@@ -384,6 +429,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function onPointerMove(e) {
+    // If scrolled past hero section and not dragging, skip parallax work to keep scrolling 100% fluid
+    if (window.scrollY > 800 && !isDragging) return;
+
     const clientX = e.clientX || (e.touches && e.touches[0].clientX);
     const clientY = e.clientY || (e.touches && e.touches[0].clientY);
 
@@ -419,16 +467,15 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   canvasEl.addEventListener('mousedown', onPointerDown);
-  window.addEventListener('mousemove', onPointerMove);
-  window.addEventListener('mouseup', onPointerUp);
+  window.addEventListener('mousemove', onPointerMove, { passive: true });
+  window.addEventListener('mouseup', onPointerUp, { passive: true });
 
   canvasEl.addEventListener('touchstart', onPointerDown, { passive: true });
   window.addEventListener('touchmove', onPointerMove, { passive: true });
-  window.addEventListener('touchend', onPointerUp);
+  window.addEventListener('touchend', onPointerUp, { passive: true });
 
   // --- SLIDE NAVIGATION & 3D TUMBLE ROLLING ANIMATION ---
   function updateSlideUI(slide) {
-    // Update bottom left text
     const taglineEl = document.getElementById('hero-tagline');
     const descEl = document.getElementById('hero-desc');
     const slideNumberEl = document.getElementById('hero-slide-number');
@@ -438,17 +485,17 @@ document.addEventListener('DOMContentLoaded', () => {
     if (taglineEl) taglineEl.textContent = slide.tagline;
     if (descEl) descEl.textContent = slide.description;
     if (slideNumberEl) slideNumberEl.textContent = slide.index;
-    if (startTodayTextEl) startTodayTextEl.textContent = `Start Today: ${slide.category}`;
+    if (startTodayTextEl) startTodayTextEl.textContent = `Get Quote: ${slide.category}`;
     if (sliderInput) sliderInput.value = currentSlideIndex;
 
-    // Update pagination dots
+    // Update pagination dots in hero
     document.querySelectorAll('.slide-dot').forEach((dot, idx) => {
       if (idx === currentSlideIndex) {
-        dot.classList.add('bg-amber-400', 'scale-125');
-        dot.classList.remove('bg-white/30');
+        dot.classList.add('bg-clay-500', 'scale-125');
+        dot.classList.remove('bg-clay-500/30');
       } else {
-        dot.classList.remove('bg-amber-400', 'scale-125');
-        dot.classList.add('bg-white/30');
+        dot.classList.remove('bg-clay-500', 'scale-125');
+        dot.classList.add('bg-clay-500/30');
       }
     });
   }
@@ -512,14 +559,13 @@ document.addEventListener('DOMContentLoaded', () => {
         },
       });
 
-      // Animate DOM elements fade
+      // Animate DOM text fade
       window.gsap.fromTo(
         ['#hero-tagline', '#hero-desc'],
         { opacity: 0, y: 15 },
         { opacity: 1, y: 0, duration: 0.6, stagger: 0.1, delay: 0.2 }
       );
     } else {
-      // Fallback without GSAP
       renderTextCanvas(nextSlide, 1.0);
       textTexture.needsUpdate = true;
       glassCube.rotation.y += Math.PI * 1.5;
@@ -527,18 +573,33 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     updateSlideUI(nextSlide);
+    resetSlideTimer();
   }
 
-  // Next / Prev Button Listeners
-  const prevBtn = document.getElementById('slide-prev-btn');
-  const nextBtn = document.getElementById('slide-next-btn');
+  // --- AUTOMATIC SLIDE TRANSITION PAGE TIMER (Every 9 seconds per slide) ---
+  let slideInterval = null;
+  function startSlideTimer() {
+    stopSlideTimer();
+    slideInterval = setInterval(() => {
+      if (!isDragging && !isTransitioning) {
+        goToSlide((currentSlideIndex + 1) % slides.length, 1);
+      }
+    }, 9000);
+  }
 
-  if (prevBtn) {
-    prevBtn.addEventListener('click', () => goToSlide(currentSlideIndex - 1, -1));
+  function stopSlideTimer() {
+    if (slideInterval) {
+      clearInterval(slideInterval);
+      slideInterval = null;
+    }
   }
-  if (nextBtn) {
-    nextBtn.addEventListener('click', () => goToSlide(currentSlideIndex + 1, 1));
+
+  function resetSlideTimer() {
+    startSlideTimer();
   }
+
+  // Initialize auto-slide transition
+  startSlideTimer();
 
   // Slide Range Slider Listener
   const slideRange = document.getElementById('hero-slide-range');
@@ -581,9 +642,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const aberrationBtn = document.getElementById('toggle-aberration-btn');
   const aberrationDisplay = document.getElementById('aberration-display');
   const aberrations = [
-    { label: 'Medium', val: 0.048 },
-    { label: 'High', val: 0.09 },
-    { label: 'Subtle', val: 0.02 },
+    { label: 'Medium', val: 0.024 },
+    { label: 'High', val: 0.05 },
+    { label: 'Subtle', val: 0.01 },
   ];
   let aberrationIdx = 0;
   let currentAberrationVal = aberrations[0].val;
@@ -620,6 +681,12 @@ document.addEventListener('DOMContentLoaded', () => {
   function animate() {
     requestAnimationFrame(animate);
 
+    // If hero section is completely out of view, pause expensive WebGL rendering passes
+    // to give 100% GPU priority and hardware compositing to smooth trackpad cursor scrolling
+    if (window.scrollY > (window.innerHeight + 150)) {
+      return;
+    }
+
     const delta = clock.getDelta();
     const elapsedTime = clock.getElapsedTime();
 
@@ -631,7 +698,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Apply continuous 3D rolling physics if not actively dragging
     if (!isDragging) {
-      // Natural ambient rolling motion
       const baseRollX = 0.005 * baseSpeedMultiplier;
       const baseRollY = 0.007 * baseSpeedMultiplier;
       const baseRollZ = 0.002 * baseSpeedMultiplier;
@@ -644,9 +710,10 @@ document.addEventListener('DOMContentLoaded', () => {
       glassCube.rotation.y += baseRollY + velocity.y;
       glassCube.rotation.z += baseRollZ;
 
+      const isMobileAnim = container.clientWidth < 768;
       // Levitation floating bob
-      glassCube.position.y = Math.sin(elapsedTime * 1.5) * 0.12;
-      glassCube.position.x = mouseTilt.x * 0.4;
+      glassCube.position.y = Math.sin(elapsedTime * 1.5) * (isMobileAnim ? 0.08 : 0.12);
+      glassCube.position.x = mouseTilt.x * (isMobileAnim ? 0.12 : 0.4);
     }
 
     // Animate background particles
@@ -655,13 +722,11 @@ document.addEventListener('DOMContentLoaded', () => {
       particles.rotation.x = elapsedTime * 0.015;
     }
 
-    // --- TWO-PASS RENDERING PIPELINE FOR REFRACTION ---
-    // 1. Hide the glass cube and render background scene to renderTarget
+    // Two-pass rendering pipeline for refraction
     glassCube.visible = false;
     renderer.setRenderTarget(renderTarget);
     renderer.render(scene, camera);
 
-    // 2. Make glass cube visible and render scene to default screen buffer
     glassCube.visible = true;
     renderer.setRenderTarget(null);
     renderer.render(scene, camera);
@@ -674,93 +739,144 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!container) return;
     const width = container.clientWidth;
     const height = container.clientHeight;
+    const isMobile = width < 768;
 
     camera.aspect = width / height;
+    camera.position.z = isMobile ? 11.2 : 8.5;
     camera.updateProjectionMatrix();
+
+    const cubeScale = isMobile ? 0.88 : 1.0;
+    glassCube.scale.set(cubeScale, cubeScale, cubeScale);
 
     renderer.setSize(width, height);
     renderTarget.setSize(width * 1.5, height * 1.5);
     glassUniforms.uResolution.value.set(width, height);
+
+    if (typeof updateTextMeshSize === 'function') {
+      updateTextMeshSize();
+    }
   }
 
   window.addEventListener('resize', onWindowResize);
 
-  // --- SOLAR SAVINGS CALCULATOR LOGIC ---
-  const billSlider = document.getElementById('calc-bill-slider');
-  const billValDisplay = document.getElementById('calc-bill-val');
-  const homeSlider = document.getElementById('calc-home-slider');
-  const homeValDisplay = document.getElementById('calc-home-val');
-  const regionSelect = document.getElementById('calc-region');
-  const batterySelect = document.getElementById('calc-battery');
+  // --- NIGERIAN GENERATOR & SOLAR SAVINGS CALCULATOR LOGIC ---
+  const fuelSlider = document.getElementById('calc-fuel-slider');
+  const fuelValDisplay = document.getElementById('calc-fuel-val');
+  const hoursSlider = document.getElementById('calc-hours-slider');
+  const hoursValDisplay = document.getElementById('calc-hours-val');
+  const packageSelect = document.getElementById('calc-package-select');
+  const propertyTypeSelect = document.getElementById('calc-property-type');
 
-  const savingsTotalDisplay = document.getElementById('calc-savings-total');
-  const systemSizeDisplay = document.getElementById('calc-system-size');
-  const taxCreditDisplay = document.getElementById('calc-tax-credit');
-  const paybackDisplay = document.getElementById('calc-payback');
-  const co2Display = document.getElementById('calc-co2');
+  const monthlyFuelSavedDisplay = document.getElementById('calc-monthly-saved');
+  const yearlyFuelSavedDisplay = document.getElementById('calc-yearly-saved');
+  const packageCostDisplay = document.getElementById('calc-package-cost');
+  const paybackMonthsDisplay = document.getElementById('calc-payback-months');
+  const fiveYearNetDisplay = document.getElementById('calc-5year-net');
+  const recommendedHardwareDisplay = document.getElementById('calc-hardware-rec');
 
-  function calculateSolarSavings() {
-    if (!billSlider) return;
+  // Package lookup definitions
+  const packageSpecs = {
+    '1.5kva': {
+      title: '2.5kVA / 24V Pure Sine Wave Inverter',
+      panels: '4x 450W Mono PERC Panels (1.8kW Array)',
+      battery: '2.56kWh Lithium LiFePO4 Battery',
+      cost: 1650000,
+      appliances: 'Lights, Inverter Fans, Smart TV, Laptops, Decoders, Phones',
+    },
+    '5kva': {
+      title: '5kVA / 48V Hybrid Deye/Felicity Inverter',
+      panels: '6x 550W Tier-1 Mono Half-Cell Panels (3.3kW Array)',
+      battery: '5.12kWh / 48V LiFePO4 Lithium Wallmount',
+      cost: 3850000,
+      appliances: '1x 1.5HP Inverter AC, Fridge, Inverter Freezer, 1HP Pumping Machine, Lighting, Sound System',
+    },
+    '10kva': {
+      title: '10kVA / 48V Dual-MPPT Commercial Hybrid Inverter',
+      panels: '12x 585W Bifacial Monocrystalline Panels (7.0kW Array)',
+      battery: '15kWh High-Capacity Lithium Server Rack',
+      cost: 8600000,
+      appliances: '3x Inverter ACs, Deep Freezers, Borehole Pumping Machine, Washing Machine, Entire 5-Bed Duplex',
+    },
+    '15kva': {
+      title: '15kVA - 20kVA Three-Phase Industrial Solar System',
+      panels: '20x 600W Tier-1 Monocrystalline Array (12kW Array)',
+      battery: '30kWh Industrial Lithium Battery Bank',
+      cost: 14500000,
+      appliances: 'Multiple ACs, Cold Room, Commercial Plaza, Hotel, Supermarket, Hospital Clinic',
+    },
+  };
 
-    const monthlyBill = parseFloat(billSlider.value);
-    const sqft = parseFloat(homeSlider ? homeSlider.value : 2500);
-    const sunHours = parseFloat(regionSelect ? regionSelect.value : 5.2);
-    const batteryCount = parseInt(batterySelect ? batterySelect.value : 1);
+  function calculateNigerianSolarSavings() {
+    if (!fuelSlider) return;
 
-    if (billValDisplay) billValDisplay.textContent = `$${monthlyBill}`;
-    if (homeValDisplay) homeValDisplay.textContent = `${sqft.toLocaleString()} sq ft`;
+    const dailyFuel = parseFloat(fuelSlider.value); // Daily Naira spent on fuel
+    const dailyHours = parseFloat(hoursSlider ? hoursSlider.value : 10);
+    const selectedPkgKey = packageSelect ? packageSelect.value : '5kva';
+    const pkg = packageSpecs[selectedPkgKey] || packageSpecs['5kva'];
 
-    // Calculation formulas
-    const annualElectricCost = monthlyBill * 12;
-    // Estimated kW needed based on monthly bill & sun hours
-    const estimatedKWhPerMonth = monthlyBill / 0.18; // ~18c per kWh avg
-    const dailyKWh = estimatedKWhPerMonth / 30;
-    const systemSizeKW = Math.max(4.0, (dailyKWh / sunHours) * 1.15);
-
-    // Estimated system gross cost ($2.95 per watt installed)
-    const baseSolarCost = systemSizeKW * 1000 * 2.95;
-    const batteryCost = batteryCount * 8500;
-    const totalGrossCost = baseSolarCost + batteryCost;
-
-    // 30% Federal ITC Tax Credit
-    const taxCredit = totalGrossCost * 0.3;
-    const netCost = totalGrossCost - taxCredit;
-
-    // 25-Year cumulative savings (assuming 4.5% annual utility inflation)
-    let cumulativeUtilityExpense = 0;
-    let rate = annualElectricCost;
-    for (let yr = 1; yr <= 25; yr++) {
-      cumulativeUtilityExpense += rate;
-      rate *= 1.045; // 4.5% grid inflation
+    if (fuelValDisplay) {
+      fuelValDisplay.innerHTML = `<span class="text-butter-500 font-bold mr-0.5">₦</span>${dailyFuel.toLocaleString()}/day`;
     }
+    if (hoursValDisplay) hoursValDisplay.textContent = `${dailyHours} Hours/day`;
 
-    const lifetimeSavings = Math.max(0, cumulativeUtilityExpense - netCost);
-    const paybackYears = Math.min(12, netCost / annualElectricCost);
-    const co2Tons = Math.round(systemSizeKW * 1.35 * 25);
+    // Monthly & Annual Generator Expense
+    const monthlyFuelCost = dailyFuel * 30;
+    const yearlyFuelCost = monthlyFuelCost * 12;
 
-    // Update UI Displays
-    if (savingsTotalDisplay) savingsTotalDisplay.textContent = `$${Math.round(lifetimeSavings).toLocaleString()}`;
-    if (systemSizeDisplay) systemSizeDisplay.textContent = `${systemSizeKW.toFixed(1)} kW DC`;
-    if (taxCreditDisplay) taxCreditDisplay.textContent = `$${Math.round(taxCredit).toLocaleString()}`;
-    if (paybackDisplay) paybackDisplay.textContent = `${paybackYears.toFixed(1)} Years`;
-    if (co2Display) co2Display.textContent = `${co2Tons} Metric Tons`;
+    // Generator Servicing / Oil / Spark plug overhead (~₦25,000/month)
+    const annualGenMaintenance = 25000 * 12;
+    const totalYearlyGenBurden = yearlyFuelCost + annualGenMaintenance;
+
+    // System Package Cost
+    const systemCost = pkg.cost;
+
+    // Payback period in months
+    const monthlyGenBurden = totalYearlyGenBurden / 12;
+    const paybackMonths = Math.max(6, Math.round((systemCost / monthlyGenBurden) * 10) / 10);
+
+    // 5-Year Cumulative Savings: 5 years of gen expenses minus the solar investment
+    const fiveYearGenExpense = totalYearlyGenBurden * 5;
+    const fiveYearNetSavings = Math.max(0, fiveYearGenExpense - systemCost);
+
+    // Update Displays with clean tabular numerals
+    if (monthlyFuelSavedDisplay) {
+      monthlyFuelSavedDisplay.innerHTML = `<span class="text-xs text-butter-500/80 mr-0.5">₦</span>${monthlyFuelCost.toLocaleString()}/mo`;
+    }
+    if (yearlyFuelSavedDisplay) {
+      yearlyFuelSavedDisplay.innerHTML = `<span class="text-xs text-butter-500/80 mr-0.5">₦</span>${totalYearlyGenBurden.toLocaleString()}`;
+    }
+    if (packageCostDisplay) {
+      packageCostDisplay.innerHTML = `<span class="text-xs text-butter-500/80 mr-0.5">₦</span>${systemCost.toLocaleString()}`;
+    }
+    if (paybackMonthsDisplay) paybackMonthsDisplay.textContent = `${paybackMonths} Months`;
+    if (fiveYearNetDisplay) {
+      fiveYearNetDisplay.innerHTML = `<span class="text-butter-500 mr-1 font-bold text-2xl sm:text-3xl">₦</span><span>${fiveYearNetSavings.toLocaleString()}</span>`;
+    }
+    if (recommendedHardwareDisplay) {
+      recommendedHardwareDisplay.innerHTML = `
+        <span class="text-butter-500 font-bold">${pkg.title}</span> + 
+        <span class="text-butter-500/90">${pkg.panels}</span> + 
+        <span class="text-butter-500 font-bold">${pkg.battery}</span>.
+        <span class="block text-butter-500/70 text-[11px] mt-1">Powers: ${pkg.appliances}</span>
+      `;
+    }
   }
 
-  if (billSlider) billSlider.addEventListener('input', calculateSolarSavings);
-  if (homeSlider) homeSlider.addEventListener('input', calculateSolarSavings);
-  if (regionSelect) regionSelect.addEventListener('change', calculateSolarSavings);
-  if (batterySelect) batterySelect.addEventListener('change', calculateSolarSavings);
+  if (fuelSlider) fuelSlider.addEventListener('input', calculateNigerianSolarSavings);
+  if (hoursSlider) hoursSlider.addEventListener('input', calculateNigerianSolarSavings);
+  if (packageSelect) packageSelect.addEventListener('change', calculateNigerianSolarSavings);
+  if (propertyTypeSelect) propertyTypeSelect.addEventListener('change', calculateNigerianSolarSavings);
 
-  calculateSolarSavings();
+  calculateNigerianSolarSavings();
 
-  // --- 24-HOUR INTERACTIVE SOLAR ENERGY SIMULATOR ---
+  // --- 24-HOUR NIGERIAN POWER FLOW SIMULATOR ---
   const timeSlider = document.getElementById('sim-time-slider');
   const timeDisplay = document.getElementById('sim-time-display');
   const simPhaseDisplay = document.getElementById('sim-phase-display');
   const simSolarGauge = document.getElementById('sim-solar-kw');
   const simHomeGauge = document.getElementById('sim-home-kw');
   const simBatteryGauge = document.getElementById('sim-battery-pct');
-  const simGridGauge = document.getElementById('sim-grid-kw');
+  const simGenStatus = document.getElementById('sim-gen-status');
   const simSunIndicator = document.getElementById('sim-sun-indicator');
 
   function update24hSimulator() {
@@ -772,63 +888,54 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (timeDisplay) timeDisplay.textContent = timeStr;
 
-    // Solar production curve (peaks at 13:00, 0 at night)
+    // Tropical Solar curve in Nigeria (intense sun from 07:00 to 18:30)
     let solarKW = 0;
-    if (hourFloat >= 6.0 && hourFloat <= 19.5) {
-      // Bell curve between 6:00 and 19:30
-      const progress = (hourFloat - 6.0) / (19.5 - 6.0);
-      solarKW = Math.sin(progress * Math.PI) * 11.4;
+    if (hourFloat >= 6.5 && hourFloat <= 18.5) {
+      const progress = (hourFloat - 6.5) / (18.5 - 6.5);
+      solarKW = Math.sin(progress * Math.PI) * 5.8; // for 5kVA system
     }
 
-    // Typical home power consumption curve
-    let homeKW = 1.2;
-    if (hourFloat >= 7.0 && hourFloat <= 9.0) homeKW = 3.8; // morning routine
-    else if (hourFloat >= 12.0 && hourFloat <= 16.0) homeKW = 4.2; // AC cooling
-    else if (hourFloat >= 17.5 && hourFloat <= 22.0) homeKW = 5.6; // evening cooking, lighting, EV
-    else homeKW = 1.4;
+    // Home power consumption
+    let homeKW = 1.4;
+    if (hourFloat >= 6.5 && hourFloat <= 8.5) homeKW = 2.8; // morning pump, kettle, ironing
+    else if (hourFloat >= 12.0 && hourFloat <= 16.0) homeKW = 3.6; // afternoon heat: Inverter AC running
+    else if (hourFloat >= 18.5 && hourFloat <= 22.5) homeKW = 4.1; // evening lighting, TV, AC, microwave
+    else homeKW = 1.2;
 
-    // Battery state of charge calculation
-    let batteryPct = 85;
-    let gridKW = 0.0;
-    let phase = 'Solar Generating';
+    let batteryPct = 90;
+    let phase = 'Solar Generation Active';
 
     if (solarKW > homeKW) {
-      // Surplus solar charges battery
-      phase = 'Surplus Solar Charging Battery';
-      batteryPct = Math.min(100, Math.round(50 + ((hourFloat - 8) / 8) * 50));
-      gridKW = 0.0;
+      phase = '☀️ Full Tropical Solar: Home Powered + Battery Fast Charging';
+      batteryPct = Math.min(100, Math.round(55 + ((hourFloat - 8) / 6) * 45));
     } else if (solarKW > 0) {
-      // Solar partial
-      phase = 'Solar + Battery Discharging';
-      batteryPct = Math.max(35, Math.round(100 - (hourFloat - 14) * 8));
-      gridKW = 0.0;
+      phase = '⛅ Partial Solar + Seamless Lithium Battery Discharge';
+      batteryPct = Math.max(40, Math.round(98 - (hourFloat - 14) * 12));
     } else {
-      // Night time
-      if (hourFloat >= 20 || hourFloat <= 4) {
-        phase = '100% Battery Clean Storage Power';
-        batteryPct = Math.max(25, Math.round(90 - ((hourFloat >= 20 ? hourFloat - 20 : hourFloat + 4) * 6)));
+      if (hourFloat >= 19.0 || hourFloat <= 4.0) {
+        phase = '🌙 Night Time: 100% Silent Lithium Battery Power (Gen OFF)';
+        batteryPct = Math.max(30, Math.round(92 - ((hourFloat >= 19.0 ? hourFloat - 19.0 : hourFloat + 5.0) * 6)));
       } else {
-        phase = 'Pre-dawn Baseline';
-        batteryPct = 32;
+        phase = '🌅 Pre-dawn Baseline: Battery Sustaining Essential Load';
+        batteryPct = 35;
       }
-      gridKW = 0.0;
     }
 
-    // Update Gauges
     if (simPhaseDisplay) simPhaseDisplay.textContent = phase;
     if (simSolarGauge) simSolarGauge.textContent = `${solarKW.toFixed(1)} kW`;
     if (simHomeGauge) simHomeGauge.textContent = `${homeKW.toFixed(1)} kW`;
     if (simBatteryGauge) simBatteryGauge.textContent = `${batteryPct}%`;
-    if (simGridGauge) simGridGauge.textContent = `${gridKW.toFixed(1)} kW (Zero Cost)`;
+    if (simGenStatus) {
+      simGenStatus.textContent = 'OFF (₦0.00 Fuel Used)';
+    }
 
-    // Update sun position arc
     if (simSunIndicator) {
-      const sunProgress = Math.max(0, Math.min(1, (hourFloat - 6) / 14));
+      const sunProgress = Math.max(0, Math.min(1, (hourFloat - 6) / 13));
       const leftPos = sunProgress * 100;
-      const topPos = Math.sin(sunProgress * Math.PI) * -40 + 40;
+      const topPos = Math.sin(sunProgress * Math.PI) * -38 + 38;
       simSunIndicator.style.left = `${leftPos}%`;
       simSunIndicator.style.top = `${topPos}%`;
-      simSunIndicator.style.opacity = solarKW > 0.5 ? '1' : '0.2';
+      simSunIndicator.style.opacity = solarKW > 0.4 ? '1' : '0.25';
     }
   }
 
@@ -837,11 +944,10 @@ document.addEventListener('DOMContentLoaded', () => {
     update24hSimulator();
   }
 
-  // --- 3D ROOF SURVEY QUOTE MODAL ---
+  // --- WHATSAPP & ROOF SURVEY BOOKING MODAL ---
   const quoteModal = document.getElementById('quote-modal');
   const openModalBtns = document.querySelectorAll('.open-quote-modal');
   const closeModalBtn = document.getElementById('close-modal-btn');
-  const modalForm = document.getElementById('quote-wizard-form');
 
   function openModal() {
     if (!quoteModal) return;
@@ -860,76 +966,318 @@ document.addEventListener('DOMContentLoaded', () => {
   openModalBtns.forEach((btn) => btn.addEventListener('click', openModal));
   if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
 
-  // Close modal when clicking outside backdrop
   if (quoteModal) {
     quoteModal.addEventListener('click', (e) => {
       if (e.target === quoteModal) closeModal();
     });
   }
 
-  // Multi-step modal navigation
-  let currentStep = 1;
-  const nextStepBtn = document.getElementById('modal-next-btn');
-  const prevStepBtn = document.getElementById('modal-prev-btn');
-
-  function updateModalStep(step) {
-    currentStep = step;
-    document.querySelectorAll('.modal-step-panel').forEach((panel) => {
-      const s = parseInt(panel.dataset.step);
-      panel.classList.toggle('hidden', s !== currentStep);
-    });
-
-    if (prevStepBtn) prevStepBtn.classList.toggle('hidden', currentStep === 1);
-    if (nextStepBtn) {
-      nextStepBtn.textContent = currentStep === 3 ? 'Generate 3D Solar Proposal' : 'Continue Next';
-    }
-
-    // Step progress indicators
-    document.querySelectorAll('.step-pill').forEach((pill, idx) => {
-      if (idx + 1 <= currentStep) {
-        pill.classList.add('bg-amber-400', 'text-black');
-        pill.classList.remove('bg-white/10', 'text-white/40');
-      } else {
-        pill.classList.remove('bg-amber-400', 'text-black');
-        pill.classList.add('bg-white/10', 'text-white/40');
-      }
-    });
-  }
-
-  if (nextStepBtn) {
-    nextStepBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      if (currentStep < 3) {
-        updateModalStep(currentStep + 1);
-        playGlassChime(580 + currentStep * 60, 0.3);
-      } else {
-        // Show success state
-        document.getElementById('modal-wizard-body').classList.add('hidden');
-        document.getElementById('modal-success-screen').classList.remove('hidden');
-        playGlassChime(780, 0.8);
-      }
-    });
-  }
-
-  if (prevStepBtn) {
-    prevStepBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      if (currentStep > 1) {
-        updateModalStep(currentStep - 1);
-        playGlassChime(480, 0.3);
-      }
-    });
-  }
-
-  // Pre-fill estimate from calculator button
+  // Pre-fill estimate to modal from calculator button
   const lockInEstimateBtn = document.getElementById('calc-lock-in-btn');
   if (lockInEstimateBtn) {
     lockInEstimateBtn.addEventListener('click', () => {
       openModal();
-      const monthlyBillInput = document.getElementById('modal-monthly-bill');
-      if (monthlyBillInput && billSlider) {
-        monthlyBillInput.value = billSlider.value;
+    });
+  }
+
+  // Instant WhatsApp Inquiry Handler
+  const sendWhatsAppBtn = document.getElementById('modal-whatsapp-btn');
+  if (sendWhatsAppBtn) {
+    sendWhatsAppBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('modal-client-name')?.value || 'Valued Customer';
+      const state = document.getElementById('modal-client-state')?.value || 'Lagos';
+      const property = document.getElementById('modal-client-property')?.value || 'Duplex';
+      const system = document.getElementById('modal-system-capacity')?.value || '5kVA Hybrid';
+      const phone = document.getElementById('modal-client-phone')?.value || '';
+
+      const message = `Hello Solaris Nigeria, I would like to get a quote and schedule an engineering site survey.%0A%0A*Name:* ${encodeURIComponent(name)}%0A*Location/State:* ${encodeURIComponent(state)}%0A*Property Type:* ${encodeURIComponent(property)}%0A*Interested System:* ${encodeURIComponent(system)}%0A*Phone:* ${encodeURIComponent(phone)}`;
+      
+      const whatsappURL = `https://wa.me/2349035851824?text=${message}`;
+      window.open(whatsappURL, '_blank');
+      closeModal();
+    });
+  }
+
+  // Consistent Clay Brown header styling with scroll shadow enhancement
+  const headerEl = document.querySelector('header');
+  function handleHeaderScroll() {
+    if (!headerEl) return;
+    if (window.scrollY > 15) {
+      headerEl.classList.add('is-scrolled');
+    } else {
+      headerEl.classList.remove('is-scrolled');
+    }
+  }
+
+  window.addEventListener('scroll', handleHeaderScroll, { passive: true });
+  handleHeaderScroll();
+
+  // Automatic fit calculation for straight-line headings to guarantee zero truncation
+  function fitHeadingsToContainer() {
+    if (window.innerWidth < 768) return;
+    document.querySelectorAll('.heading-straight-line').forEach((el) => {
+      const parent = el.parentElement;
+      if (!parent) return;
+      el.style.fontSize = '';
+      const availableWidth = parent.clientWidth - 16;
+      const currentWidth = el.scrollWidth;
+      if (currentWidth > availableWidth && availableWidth > 200) {
+        const computedSize = parseFloat(window.getComputedStyle(el).fontSize);
+        const ratio = (availableWidth / currentWidth) * 0.98;
+        el.style.fontSize = `${Math.floor(computedSize * ratio)}px`;
       }
     });
   }
+
+  fitHeadingsToContainer();
+  window.addEventListener('resize', fitHeadingsToContainer);
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(fitHeadingsToContainer);
+  }
+
+  // Mobile Left Slide-Over Navigation Drawer
+  const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+  const mobileMenuCloseBtn = document.getElementById('mobile-menu-close-btn');
+  const mobileMenuDrawer = document.getElementById('mobile-menu-drawer');
+  const mobileMenuBackdrop = document.getElementById('mobile-nav-backdrop');
+
+  function openMobileMenu() {
+    if (mobileMenuDrawer) mobileMenuDrawer.classList.add('is-open');
+    if (mobileMenuBackdrop) mobileMenuBackdrop.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    if (window.lucide) window.lucide.createIcons();
+  }
+
+  function closeMobileMenu() {
+    if (mobileMenuDrawer) mobileMenuDrawer.classList.remove('is-open');
+    if (mobileMenuBackdrop) mobileMenuBackdrop.classList.remove('is-open');
+    document.body.style.overflow = '';
+  }
+
+  if (mobileMenuBtn) {
+    mobileMenuBtn.addEventListener('click', openMobileMenu);
+  }
+  if (mobileMenuCloseBtn) {
+    mobileMenuCloseBtn.addEventListener('click', closeMobileMenu);
+  }
+  if (mobileMenuBackdrop) {
+    mobileMenuBackdrop.addEventListener('click', closeMobileMenu);
+  }
+
+  document.querySelectorAll('.mobile-nav-link').forEach((link) => {
+    link.addEventListener('click', () => {
+      closeMobileMenu();
+    });
+  });
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeMobileMenu();
+  });
+
+  // --- SCROLL ENTRANCE ANIMATIONS (Always & At All Times on Scroll) ---
+  function initScrollAnimations() {
+    const revealElements = document.querySelectorAll('.reveal-on-scroll');
+    if (!revealElements.length) return;
+
+    // Graceful fallback if IntersectionObserver is not available
+    if (!('IntersectionObserver' in window)) {
+      revealElements.forEach((el) => {
+        el.classList.add('is-revealed');
+        el.querySelectorAll('.reveal-stagger-item').forEach((item) => item.classList.add('is-revealed'));
+      });
+      return;
+    }
+
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px 0px -40px 0px',
+      threshold: 0.08,
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const el = entry.target;
+        const staggerItems = el.querySelectorAll('.reveal-stagger-item');
+
+        if (entry.isIntersecting) {
+          el.classList.add('is-revealed');
+          staggerItems.forEach((item) => item.classList.add('is-revealed'));
+        } else {
+          // Re-arm element and children when scrolled out of view so it animates in every time you scroll
+          // Since CSS has transition:none on reset, this re-arms instantaneously without frame drops or jitter
+          el.classList.remove('is-revealed');
+          staggerItems.forEach((item) => item.classList.remove('is-revealed'));
+        }
+      });
+    }, observerOptions);
+
+    // Observe all elements continuously so entrance animation triggers at all times on scroll
+    revealElements.forEach((el) => {
+      observer.observe(el);
+    });
+  }
+
+  initScrollAnimations();
+
+  // --- MOBILE PACKAGES SWIPE CAROUSEL (Horizontal Swipe on Phones) ---
+  const pkgCarousel = document.getElementById('packages-carousel');
+  const pkgDots = document.querySelectorAll('.pkg-dot');
+
+  if (pkgCarousel && pkgDots.length > 0) {
+    function updateActivePackageDot() {
+      if (window.innerWidth >= 1024) return;
+      const scrollLeft = pkgCarousel.scrollLeft;
+      const cardEl = pkgCarousel.querySelector('.reveal-stagger-item');
+      if (!cardEl) return;
+      const cardWidth = cardEl.offsetWidth;
+      const gap = 16;
+      const activeIndex = Math.min(
+        pkgDots.length - 1,
+        Math.max(0, Math.round(scrollLeft / (cardWidth + gap)))
+      );
+
+      pkgDots.forEach((dot, idx) => {
+        if (idx === activeIndex) {
+          dot.classList.add('bg-butter-500', 'scale-125');
+          dot.classList.remove('bg-butter-500/30');
+        } else {
+          dot.classList.remove('bg-butter-500', 'scale-125');
+          dot.classList.add('bg-butter-500/30');
+        }
+      });
+    }
+
+    pkgCarousel.addEventListener('scroll', updateActivePackageDot, { passive: true });
+
+    pkgDots.forEach((dot) => {
+      dot.addEventListener('click', () => {
+        const idx = parseInt(dot.dataset.index);
+        const cards = pkgCarousel.querySelectorAll('.reveal-stagger-item');
+        if (cards[idx]) {
+          cards[idx].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
+      });
+    });
+  }
+
+  // --- MOBILE SERVICES SWIPE CAROUSEL ---
+  const servicesCarousel = document.getElementById('services-carousel');
+  const servicesDots = document.querySelectorAll('.service-dot');
+
+  if (servicesCarousel && servicesDots.length > 0) {
+    function updateActiveServiceDot() {
+      if (window.innerWidth >= 1024) return;
+      const scrollLeft = servicesCarousel.scrollLeft;
+      const cardEl = servicesCarousel.querySelector('.reveal-stagger-item');
+      if (!cardEl) return;
+      const cardWidth = cardEl.offsetWidth;
+      const gap = 16;
+      const activeIndex = Math.min(
+        servicesDots.length - 1,
+        Math.max(0, Math.round(scrollLeft / (cardWidth + gap)))
+      );
+
+      servicesDots.forEach((dot, idx) => {
+        if (idx === activeIndex) {
+          dot.classList.add('bg-butter-500', 'scale-125');
+          dot.classList.remove('bg-butter-500/30');
+        } else {
+          dot.classList.remove('bg-butter-500', 'scale-125');
+          dot.classList.add('bg-butter-500/30');
+        }
+      });
+    }
+
+    servicesCarousel.addEventListener('scroll', updateActiveServiceDot, { passive: true });
+
+    servicesDots.forEach((dot) => {
+      dot.addEventListener('click', () => {
+        const idx = parseInt(dot.dataset.index);
+        const cards = servicesCarousel.querySelectorAll('.reveal-stagger-item');
+        if (cards[idx]) {
+          cards[idx].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
+      });
+    });
+  }
+
+  // --- MOBILE TESTIMONIALS / CUSTOMER PROOF SWIPE CAROUSEL ---
+  const reviewCarousel = document.getElementById('testimonials-carousel');
+  const reviewDots = document.querySelectorAll('.review-dot');
+
+  if (reviewCarousel && reviewDots.length > 0) {
+    function updateActiveReviewDot() {
+      if (window.innerWidth >= 768) return;
+      const scrollLeft = reviewCarousel.scrollLeft;
+      const cardEl = reviewCarousel.querySelector('.reveal-stagger-item');
+      if (!cardEl) return;
+      const cardWidth = cardEl.offsetWidth;
+      const gap = 16;
+      const activeIndex = Math.min(
+        reviewDots.length - 1,
+        Math.max(0, Math.round(scrollLeft / (cardWidth + gap)))
+      );
+
+      reviewDots.forEach((dot, idx) => {
+        if (idx === activeIndex) {
+          dot.classList.add('bg-butter-500', 'scale-125');
+          dot.classList.remove('bg-butter-500/30');
+        } else {
+          dot.classList.remove('bg-butter-500', 'scale-125');
+          dot.classList.add('bg-butter-500/30');
+        }
+      });
+    }
+
+    reviewCarousel.addEventListener('scroll', updateActiveReviewDot, { passive: true });
+
+    reviewDots.forEach((dot) => {
+      dot.addEventListener('click', () => {
+        const idx = parseInt(dot.dataset.index);
+        const cards = reviewCarousel.querySelectorAll('.reveal-stagger-item');
+        if (cards[idx]) {
+          cards[idx].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
+      });
+    });
+  }
+
+  // --- FLOATING BACK TO TOP BUTTON ---
+  const backToTopBtn = document.getElementById('back-to-top-btn');
+  if (backToTopBtn) {
+    function toggleBackToTop() {
+      if (window.scrollY > 300) {
+        backToTopBtn.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+        backToTopBtn.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
+      } else {
+        backToTopBtn.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
+        backToTopBtn.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
+      }
+    }
+
+    window.addEventListener('scroll', toggleBackToTop, { passive: true });
+    toggleBackToTop();
+
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+  }
+
+  // --- SMOOTH SCROLL FOR IN-PAGE ANCHOR LINKS (Keeps 2-Finger Trackpad Scrolling 100% Fluid) ---
+  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+    anchor.addEventListener('click', function(e) {
+      const targetId = this.getAttribute('href');
+      if (targetId && targetId !== '#' && targetId.length > 1) {
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          e.preventDefault();
+          targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
+    });
+  });
 });
